@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comision;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class ComisionController extends Controller
 {
@@ -20,7 +21,8 @@ class ComisionController extends Controller
      */
     public function create()
     {
-        //
+        $docentes = User::all(); 
+        return view('comisiones.create', compact('docentes'));
     }
 
     /**
