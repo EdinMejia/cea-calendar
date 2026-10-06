@@ -13,7 +13,7 @@ class ComisionController extends Controller
      */
     public function index()
     {
-        //
+        return view('comisiones.index');
     }
 
     /**
