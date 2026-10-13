@@ -5,7 +5,7 @@
                 
                 <h1 class="text-2xl font-bold text-center mb-6">CREAR NUEVA COMISIÓN</h1>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8" x-data="{ mostrarModal: false, comisionSeleccionada: '' }">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8" x-data="{ mostrarModal: false, comisionSeleccionada: '', colorSeleccionado: 'transparent' }">
                     
                     <div>
                         <h2 class="text-lg font-bold mb-4">Nombres</h2>
@@ -30,15 +30,26 @@
                             
                             <select name="comision_id" 
                                 x-model="comisionSeleccionada"
-                                    x-on:change="if($event.target.value === 'nueva') { mostrarModal = true; }" 
-                                    class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-indigo-500 focus:ring-indigo-500">
+                                    x-on:change="
+                                    if($event.target.value === 'nueva') { mostrarModal = true; }
+                                    colorSeleccionado = $event.target.options[$event.target.selectedIndex].dataset.color;
+                                    " 
+                                    class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-indigo-500 focus:ring-indigo-500 mb-4">
                                 
-                                <option value="" disabled selected> Elija la comision </option>
-                                <option value="1">Deportes (Amarillo)</option>
-                                <option value="2">Cultura y Civismo (Verde)</option>
-                                <option value="nueva" class="font-bold text-green-600">+ Añadir nueva comisión...</option>
-                                
+                                <option value="" disabled selected data-color="transparent"> Elija la comision </option>
+                                <option value="1" data-color="#FCD43D">Deportes (Amarillo)</option>
+                                <option value="2" data-color="#22C55E">Cultura y Civismo (Verde)</option>
+                                <option value="nueva" data-color="transparent" class="font-bold text-green-600">+ Añadir nueva comisión...</option>
                             </select>
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Ciclo</label>
+                            <input type="date" name="ciclo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-indigo-500 focus:ring-indigo-500 mb-6">
+
+                            <div class="flex items-center mt-4 gap-3">
+                                <label class="block text-gray-700 text-sm font-bold">Color: </label>
+                                <div style="width: 35px; height: 35px; border-radius: 70%;" 
+                                    class="border border-gray-400 shadow-md transition-colors duration-200" 
+                                    :style="{ backgroundColor: colorSeleccionado }">
+                                </div>
                         </div>
                     </div>
 
