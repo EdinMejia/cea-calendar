@@ -4,9 +4,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 
                 <h1 class="text-2xl font-bold text-center mb-6">CREAR NUEVA COMISIÓN</h1>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8" x-data="{ mostrarModal: false, comisionSeleccionada: '', colorSeleccionado: 'transparent' }">
-                    
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8" x-data="{ mostrarModal: false, comisionSeleccionada: '', colorSeleccionado: 'transparent', comisionTexto: '-- Seleccione una --', dropdownAbierto: false, nuevoColor: '#3B82F6' }">
                     <div>
                         <h2 class="text-lg font-bold mb-4">Nombres</h2>
                         <p class="text-sm text-gray-600 mb-4">Seleccione el nombre de los docentes que conformarán la comisión</p>
@@ -64,6 +62,39 @@
                                 </label>
                                 <input type="text" name="nueva_comision_nombre" placeholder="Ej. Festividades" 
                                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-indigo-500 focus:ring-indigo-500">
+
+                                <label class="mb-4">
+                                    <label class="block text-gray-700 text-sm font-bold mb-2">
+                                        Color de la nueva comisión
+                                </label>
+                                <input type="hidden" name="color_nueva_comision" x-model="nuevoColor"> 
+
+                                <div class="flex gap-3 mt-2">
+                                    <button type="button"
+                                        @click="nuevoColor = '#3B82F6'"
+                                        class="w-8 h-8 rounded-full shadow-sm focus:outline-none transition-transform"
+                                        :style="nuevoColor === '#3B82F6' ? 'background-color: #3B82F6; border: 3px solid #1f2937; transform: scale(1.15);' : 'background-color: #3B82F6; border: 2px solid transparent;'"></button>
+
+                                    <button type="button"
+                                        @click="nuevoColor = '#EF4444'" 
+                                        class="w-8 h-8 rounded-full shadow-sm focus:outline-none transition-transform"
+                                        :style="nuevoColor === '#EF4444' ? 'background-color: #EF4444; border: 3px solid #1f2937; transform: scale(1.15);' : 'background-color: #EF4444; border: 2px solid transparent;'">
+                                        
+                                    <button type="button" 
+                                        @click="nuevoColor = '#8B5CF6'" 
+                                        class="w-8 h-8 rounded-full shadow-sm focus:outline-none transition-transform"
+                                        :style="nuevoColor === '#8B5CF6' ? 'background-color: #8B5CF6; border: 3px solid #1f2937; transform: scale(1.15);' : 'background-color: #8B5CF6; border: 2px solid transparent;'">
+                                    
+                                    <button type="button" 
+                                        @click="nuevoColor = '#F97316'" 
+                                        class="w-8 h-8 rounded-full shadow-sm focus:outline-none transition-transform"
+                                        :style="nuevoColor === '#F97316' ? 'background-color: #F97316; border: 3px solid #1f2937; transform: scale(1.15);' : 'background-color: #F97316; border: 2px solid transparent;'">
+                                    
+                                    <button type="button" 
+                                        @click="nuevoColor = '#14B8A6'" 
+                                        class="w-8 h-8 rounded-full shadow-sm focus:outline-none transition-transform"
+                                        :style="nuevoColor === '#14B8A6' ? 'background-color: #14B8A6; border: 3px solid #1f2937; transform: scale(1.15);' : 'background-color: #14B8A6; border: 2px solid transparent;'">
+                                        
                             </div>
 
                             <div class="flex justify-end gap-3 mt-6">
@@ -79,9 +110,9 @@
 
                 </div>
 
-                <div class="flex items-center justify-center mt-8 gap-4">
+                <div class="flex items-center justify-center gap-4 mt-6">
                     <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out">
-                        ASIGNAR COMISIÓN
+                        CREAR COMISIÓN
                     </button>
                     <a href="{{ route('comisiones.index') }}" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out">
                         CANCELAR
