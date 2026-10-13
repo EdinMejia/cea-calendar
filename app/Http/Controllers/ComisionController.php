@@ -13,7 +13,7 @@ class ComisionController extends Controller
      */
     public function index()
     {
-        return view('comisiones.index');
+        return view('comision.index');
     }
 
     /**
@@ -22,7 +22,7 @@ class ComisionController extends Controller
     public function create()
     {
         $docentes = User::all(); 
-        return view('comisiones.create', compact('docentes'));
+        return view('comision.create', compact('docentes'));
     }
 
     /**
