@@ -4,11 +4,14 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 
                 <h1 class="text-2xl font-bold text-center mb-6">CREAR NUEVA COMISIÓN</h1>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8" x-data="{ mostrarModal: false, comisionSeleccionada: '', colorSeleccionado: 'transparent', comisionTexto: '-- Seleccione una --', dropdownAbierto: false, nuevoColor: '#3B82F6' }">
-                    <div>
-                        <h2 class="text-lg font-bold mb-4">Nombres</h2>
-                        <p class="text-sm text-gray-600 mb-4">Seleccione el nombre de los docentes que conformarán la comisión</p>
-                        
+
+                <form action="{{ route('comisiones.store') }}" method="POST">
+                    @csrf
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8" x-data="{ mostrarModal: false, comisionSeleccionada: '', colorSeleccionado: 'transparent', comisionTexto: '-- Seleccione una --', dropdownAbierto: false, nuevoColor: '#3B82F6' }">
+                        <div>
+                            <h2 class="text-lg font-bold mb-4">Nombres</h2>
+                            <p class="text-sm text-gray-600 mb-4">Seleccione el nombre de los docentes que conformarán la comisión</p>
+                            
                         <div class="space-y-2 border p-4 rounded bg-gray-50 max-h-64 overflow-y-auto">
                             @foreach($docentes as $docente)
                                 <div>
@@ -20,7 +23,7 @@
                             @endforeach
                         </div>
                     </div>
-
+                    
                     <div>
                         <div class="mb-4 border p-4 rounded bg-gray-50">
                             
@@ -101,7 +104,7 @@
                                 <button type="button" @click="mostrarModal = false; comisionSeleccionada = ''" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded shadow">
                                     Cancelar
                                 </button>
-                                <button type="button" @click="mostrarModal = false" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow">
+                                <button type="submit" @click="mostrarModal = false" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow">
                                     Guardar Comisión
                                 </button>
                             </div>
@@ -118,7 +121,7 @@
                         CANCELAR
                     </a>
                 </div>
-
+                </form>
             </div>
         </div>
     </div>

@@ -13,7 +13,8 @@ class ComisionController extends Controller
      */
     public function index()
     {
-        return view('comision.index');
+        $comisiones = Comision::with('docentes')->get();
+        return view('comision.index', compact('comisiones'));
     }
 
     /**
@@ -30,9 +31,33 @@ class ComisionController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'docentes' => 'required|array', 
+            'comision_id' => 'required', 
+            'ciclo' => 'required|date',
+        ]);
 
+        if ($request->comision_id === 'nueva'){
+            $request->validate([
+                'nueva_comision_nombre' => 'required|string|max:255', 
+                'color_nueva_comision'=>'required|string', 
+            ]);
+        $comision = Comision::create([
+            'nombre' => $request->nueva_comision_nombre,
+            'color' => $request->color_nueva_comision,
+            'ciclo' => $request->ciclo,
+        ]);
+        $idDeLacomision = $comision->id;
+    } else {
+        $idDeLacomision = $request->comision_id;
+    }  
+
+    $comisionFinal = Comision::findOrFail($idDeLacomision);
+    $comisionFinal->docentes()->attach($request->docentes);
+
+    return redirect()->route('comisiones.index')
+        ->with('success', 'Comisión creada exitosamente.');
+    }
     /**
      * Display the specified resource.
      */

@@ -18,6 +18,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/comisiones', [ComisionController::class, 'index'])->name('comisiones.index');
     Route::get('/comisiones/crear', [ComisionController::class, 'create'])->name('comisiones.create');
+    Route::post('/comisiones', [ComisionController::class, 'store'])->name('comisiones.store');
     
 });
 
