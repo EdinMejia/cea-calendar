@@ -22,8 +22,9 @@ class ComisionController extends Controller
      */
     public function create()
     {
-        $docentes = User::all(); 
-        return view('comision.create', compact('docentes'));
+        $comisiones = Comision::all();
+        $docentes = User::all();
+        return view('comision.create', compact('comisiones', 'docentes'));
     }
 
     /**

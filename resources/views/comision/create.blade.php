@@ -38,8 +38,11 @@
                                     class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-indigo-500 focus:ring-indigo-500 mb-4">
                                 
                                 <option value="" disabled selected data-color="transparent"> Elija la comision </option>
-                                <option value="1" data-color="#FCD43D">Deportes (Amarillo)</option>
-                                <option value="2" data-color="#22C55E">Cultura y Civismo (Verde)</option>
+                                @foreach ($comisiones as $comision)
+                                    <option value="{{ $comision->id }}" data-color="{{ $comision->color ?? '#4B5563' }}">
+                                        {{ $comision->nombre }}
+                                    </option>
+                                @endforeach
                                 <option value="nueva" data-color="transparent" class="font-bold text-green-600">+ Añadir nueva comisión...</option>
                             </select>
                             <label class="block text-gray-700 text-sm font-bold mb-2">Ciclo</label>
