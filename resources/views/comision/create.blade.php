@@ -7,7 +7,7 @@
 
                 <form action="{{ route('comisiones.store') }}" method="POST">
                     @csrf
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8" x-data="{ mostrarModal: false, comisionSeleccionada: '', colorSeleccionado: 'transparent', comisionTexto: '-- Seleccione una --', dropdownAbierto: false, nuevoColor: '#3B82F6' }">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8" x-data="{ mostrarModal: false, comisionSeleccionada: '', colorSeleccionado: 'transparent', comisionTexto: '-- Seleccione una --', dropdownAbierto: false, nuevoColor: '#3B82F6', nuevaComisionNombre: '' }">
                         <div>
                             <h2 class="text-lg font-bold mb-4">Nombres</h2>
                             <p class="text-sm text-gray-600 mb-4">Seleccione el nombre de los docentes que conformarán la comisión</p>
@@ -29,12 +29,7 @@
                             
                             <label class="block text-gray-700 text-sm font-bold mb-2">Seleccione la Comisión</label>
                             
-                            <select name="comision_id" 
-                                x-model="comisionSeleccionada"
-                                    x-on:change="
-                                    if($event.target.value === 'nueva') { mostrarModal = true; }
-                                    colorSeleccionado = $event.target.options[$event.target.selectedIndex].dataset.color;
-                                    " 
+                            <select name="comision_id" x-model="comisionSeleccionada" x-on:change="if($event.target.value === 'nueva') { mostrarModal = true; } colorSeleccionado = $event.target.options[$event.target.selectedIndex].dataset.color;" 
                                     class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-indigo-500 focus:ring-indigo-500 mb-4">
                                 
                                 <option value="" disabled selected data-color="transparent"> Elija la comision </option>
@@ -66,8 +61,8 @@
                                 <label class="block text-gray-700 text-sm font-bold mb-2">
                                     Nombre de la nueva comisión
                                 </label>
-                                <input type="text" name="nueva_comision_nombre" placeholder="Ej. Festividades" 
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-indigo-500 focus:ring-indigo-500">
+                                <input type="text" name="nueva_comision_nombre" placeholder="Ej. Festividades" x-model="nuevaComisionNombre"
+                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline">
 
                                 <label class="mb-4">
                                     <label class="block text-gray-700 text-sm font-bold mb-2">
@@ -107,7 +102,41 @@
                                 <button type="button" @click="mostrarModal = false; comisionSeleccionada = ''" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded shadow">
                                     Cancelar
                                 </button>
-                                <button type="submit" @click="mostrarModal = false" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow">
+                                <button type="button"
+                                    @click="
+                                        fetch('{{ route('comisiones.ajax') }}', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Accept': 'application/json',
+                                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                            },
+                                            body: JSON.stringify({ nombre: nuevaComisionNombre, color: nuevoColor })
+                                        })
+                                        .then(async response => {
+                                            const data = await response.json();
+                                            if (response.ok && data.success) {
+                                                let select = document.querySelector ('select[name=\'comision_id\']');
+                                                let option = new Option(data.comision.name_comision, data.comision.id);
+                                                option.setAttribute('data-color', data.comision.color_comision);
+                                                select.insertBefore(option, select.lastElementChild);
+
+                                                comisionSeleccionada = data.comision.id;
+                                                colorSeleccionado = data.comision.color;
+
+                                                nuevaComisionNombre = '';
+                                                mostrarModal = false;
+                                            } else {
+                                                console.error('Error del servidor:', data);
+                                                alert('Laravel dice: faltaban datos o hay un error. revisa la consola para más detalles.');
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Error de red:', error);
+                                            alert('Error de red. revisa la consola para más detalles.');
+                                        });
+                                    "
+                                    class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow">
                                     Guardar Comisión
                                 </button>
                             </div>

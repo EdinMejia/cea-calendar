@@ -32,6 +32,7 @@ class ComisionController extends Controller
      */
     public function store(Request $request)
     {
+        
         $request->validate([
             'docentes' => 'required|array', 
             'comision_id' => 'required', 
@@ -44,9 +45,9 @@ class ComisionController extends Controller
                 'color_nueva_comision'=>'required|string', 
             ]);
         $comision = Comision::create([
-            'nombre' => $request->nueva_comision_nombre,
-            'color' => $request->color_nueva_comision,
-            'ciclo' => $request->ciclo,
+            'name_comision' => $request->nueva_comision_nombre,
+            'color_comision' => $request->color_nueva_comision,
+            'ciclo_comision' => $request->ciclo,
         ]);
         $idDeLacomision = $comision->id;
     } else {
@@ -59,6 +60,30 @@ class ComisionController extends Controller
     return redirect()->route('comisiones.index')
         ->with('success', 'Comisión creada exitosamente.');
     }
+
+    public function storeAjax(Request $request)
+    {
+        $request->validate([
+            'nombre' => 'required|string|max:75',
+            'color' => 'required|string|max:8',
+        ]); 
+
+        $comision = Comision::create([
+            'name_comision' => $request->nombre,
+            'color_comision' => $request->color,
+            'ciclo_comision' => date('Y-m-d'),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'comision' => [
+                'id' => $comision->id, 
+                'name_comision' => $comision->name_comision,
+                'color_comision' => $comision->color_comision,
+            ]
+        ]);
+    }
+
     /**
      * Display the specified resource.
      */
