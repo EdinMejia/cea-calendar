@@ -52,10 +52,14 @@ class ComisionController extends Controller
         $idDeLacomision = $comision->id;
     } else {
         $idDeLacomision = $request->comision_id;
-    }  
-
+    }
     $comisionFinal = Comision::findOrFail($idDeLacomision);
-    $comisionFinal->docentes()->attach($request->docentes);
+    $resultado = $comisionFinal->docentes()->syncWithoutDetaching($request->docentes); 
+
+    if (count($resultado['attached']) < count($request->docentes)) {
+        return redirect()->route('comisiones.index')
+            ->with('warning', 'Se guardo correctamente, pero algunos docentes fueron omitidos porque ya preexistian en la comision'); 
+    }
 
     return redirect()->route('comisiones.index')
         ->with('success', 'Comisión creada exitosamente.');
@@ -64,8 +68,12 @@ class ComisionController extends Controller
     public function storeAjax(Request $request)
     {
         $request->validate([
-            'nombre' => 'required|string|max:75',
+            'nombre' => 'required|string|max:75|unique:comisions,name_comision',
             'color' => 'required|string|max:8',
+        ], [
+            'nombre.requires' => 'El nombre de la comision no puede esta vacio', 
+            'nombre.unique' => 'Ya existe una comision con ese nombre',
+            'color.required' => 'El color de la comision no puede estar vacio',
         ]); 
 
         $comision = Comision::create([

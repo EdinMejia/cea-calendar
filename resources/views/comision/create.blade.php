@@ -5,9 +5,33 @@
                 
                 <h1 class="text-2xl font-bold text-center mb-6">CREAR NUEVA COMISIÓN</h1>
 
+                @if ($errors->any())
+                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded shadow-sm" role="alert">
+                        <div class ="flex items-center mb-2">
+                            <svg class="h-5 w-5 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <p class="font-bold text-sm">Por favor corrige los siguientes errores:</p>
+                        </div>
+                        <ul class="list-disc list-inside text-sm ml-7">
+                            <ul class="list-disc list-inside text-sm ml-7">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                @endif
+
+                <div x-show="mensajeError !== ''"
+                    x-text="mensajeError"
+                    class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 font-bold text-sm"
+                    style="display: none;">
+                </div>
+
                 <form action="{{ route('comisiones.store') }}" method="POST">
                     @csrf
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8" x-data="{ mostrarModal: false, comisionSeleccionada: '', colorSeleccionado: 'transparent', comisionTexto: '-- Seleccione una --', dropdownAbierto: false, nuevoColor: '#3B82F6', nuevaComisionNombre: '' }">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8" x-data="{ mostrarModal: false, comisionSeleccionada: '', colorSeleccionado: 'transparent', comisionTexto: '-- Seleccione una --', dropdownAbierto: false, nuevoColor: '#3B82F6', nuevaComisionNombre: '', mensajeError: '' }">
                         <div>
                             <h2 class="text-lg font-bold mb-4">Nombres</h2>
                             <p class="text-sm text-gray-600 mb-4">Seleccione el nombre de los docentes que conformarán la comisión</p>
@@ -34,8 +58,8 @@
                                 
                                 <option value="" disabled selected data-color="transparent"> Elija la comision </option>
                                 @foreach ($comisiones as $comision)
-                                    <option value="{{ $comision->id }}" data-color="{{ $comision->color ?? '#4B5563' }}">
-                                        {{ $comision->nombre }}
+                                    <option value="{{ $comision->id }}" data-color="{{ $comision->color_comision ?? '#4B5563' }}">
+                                        {{ $comision->name_comision }}
                                     </option>
                                 @endforeach
                                 <option value="nueva" data-color="transparent" class="font-bold text-green-600">+ Añadir nueva comisión...</option>
@@ -104,6 +128,7 @@
                                 </button>
                                 <button type="button"
                                     @click="
+                                        mensajeError = '';
                                         fetch('{{ route('comisiones.ajax') }}', {
                                             method: 'POST',
                                             headers: {
@@ -126,12 +151,16 @@
 
                                                 nuevaComisionNombre = '';
                                                 mostrarModal = false;
+                                            } else if (response.status === 422) {
+                                                mensajeError = Object.values(data.errors)[0][0];
                                             } else {
+                                                mensajeError = 'Ocurrio un error inesperado al guardar. '
                                                 console.error('Error del servidor:', data);
                                                 alert('Laravel dice: faltaban datos o hay un error. revisa la consola para más detalles.');
                                             }
                                         })
                                         .catch(error => {
+                                            mensajeError ='Error de conexion con el servidor.';
                                             console.error('Error de red:', error);
                                             alert('Error de red. revisa la consola para más detalles.');
                                         });
