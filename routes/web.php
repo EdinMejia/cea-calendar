@@ -20,6 +20,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/comisiones/crear', [ComisionController::class, 'create'])->name('comisiones.create');
     Route::post('/comisiones', [ComisionController::class, 'store'])->name('comisiones.store');
     Route::post('/comisiones/ajax', [ComisionController::class, 'storeAjax'])->name('comisiones.ajax');
+    Route::put('/comisiones/{id}', [ComisionController::class, 'update'])->name('comisiones.update');
+    Route::get('/comisiones/{id}/editar', [ComisionController::class, 'edit'])->name('comisiones.edit');
     
 });
 

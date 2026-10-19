@@ -23,11 +23,6 @@
                     </div>
                 @endif
 
-                <div x-show="mensajeError !== ''"
-                    x-text="mensajeError"
-                    class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 font-bold text-sm"
-                    style="display: none;">
-                </div>
 
                 <form action="{{ route('comisiones.store') }}" method="POST">
                     @csrf
@@ -80,6 +75,14 @@
                         <div @click.away="mostrarModal = false; comisionSeleccionada = ''" class="bg-white rounded-lg shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all">
                             
                             <h3 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Crear nueva comisión</h3>
+
+                            <div x-show="mensajeError !== ''"
+                                x-text="mensajeError"
+                                x-effect="if (mensajeError !== '') setTimeout(() => mensajeError = '', 4000)"
+                                x-transition.duration.500ms
+                                class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 font-bold text-sm"
+                                style="display: none;">
+                            </div>
 
                             <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">

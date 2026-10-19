@@ -15,7 +15,11 @@
                 <div class="p-6 bg-white border-b border-gray-200 overflow-x-auto">
                     
                     @if (session('success'))
-                        <div class="mb-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-sm" role="alert">
+                        <div x-data="{ show: true }"
+                            x-show="show"
+                            x-init="serTimeout(() => show = false, 5000)"
+                            x-transition.duration.500ms
+                            class="mb-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-sm" role="alert">
                             <p class="font-bold">¡Éxito!</p>
                             <p>{{ session('success') }}</p>
                         </div>
@@ -83,7 +87,7 @@
                                     </td>
 
                                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                        <a href="#" class="text-indigo-600 hover:text-indigo-900 mr-3">Editar</a>
+                                        <a href="{{ route('comisiones.edit', $comision->id)}}" class="text-indigo-600 hover:text-indigo-900 mr-3">Editar</a>
                                         <a href="#" class="text-red-600 hover:text-red-900">Eliminar</a>
                                     </td>
                                 </tr>

@@ -13,8 +13,8 @@ class ComisionController extends Controller
      */
     public function index()
     {
-        $comisiones = Comision::with('docentes')->get();
-        return view('comision.index', compact('comisiones'));
+        $comisiones = Comision::has('docentes')->get();
+        return view('comisiones.index', compact('comisiones'));
     }
 
     /**
@@ -24,7 +24,7 @@ class ComisionController extends Controller
     {
         $comisiones = Comision::all();
         $docentes = User::all();
-        return view('comision.create', compact('comisiones', 'docentes'));
+        return view('comisiones.create', compact('comisiones', 'docentes'));
     }
 
     /**
@@ -37,6 +37,10 @@ class ComisionController extends Controller
             'docentes' => 'required|array', 
             'comision_id' => 'required', 
             'ciclo' => 'required|date',
+        ], [
+            'docentes.required' => 'Debes selecionar al menos un docente de la lista', 
+            'comision_id.required' => 'Debes seleccionar una comision.', 
+            'ciclo.required' => 'La fecha del ciclo es obligatoria'
         ]);
 
         if ($request->comision_id === 'nueva'){
@@ -71,9 +75,9 @@ class ComisionController extends Controller
             'nombre' => 'required|string|max:75|unique:comisions,name_comision',
             'color' => 'required|string|max:8',
         ], [
-            'nombre.requires' => 'El nombre de la comision no puede esta vacio', 
+            'nombre.requires' => 'El nombre de la comision no puede esta vacio',
             'nombre.unique' => 'Ya existe una comision con ese nombre',
-            'color.required' => 'El color de la comision no puede estar vacio',
+            'color.required' => 'No olvides el color de la comision',
         ]); 
 
         $comision = Comision::create([
@@ -103,17 +107,36 @@ class ComisionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Comision $comision)
+    public function edit($id)
     {
-        //
+        $comision = Comision::with('docentes')->findOrFail($id);
+        $docentes = \App\Models\User::all();
+
+        return view('comisiones.edit', compact('comision', 'docentes'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Comision $comision)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'docentes' => 'required|array',
+            'ciclo' => 'required|date',
+            'name_comision' => 'required|string|max:75',
+            'color_comision' => 'required|string|max:8',
+        ]);
+
+        $comision = Comision::findOrFail($id);
+        $comision->update([
+            'name_comision' => $request->name_comision,
+            'color_comision' => $request->color_comision,
+            'ciclo_comision' => $request->ciclo,
+        ]);
+
+        $comision->docentes()->sync($request->docentes); 
+        return redirect()->route('comisiones.index')
+            ->with('success', 'Comision actualizada exitosamente');
     }
 
     /**
