@@ -6,27 +6,27 @@
                 <h1 class="text-2xl font-bold text-center mb-6">CREAR NUEVA COMISIÓN</h1>
 
                 @if ($errors->any())
-                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded shadow-sm" role="alert">
-                        <div class ="flex items-center mb-2">
+                    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 4000)" x-transition.duration.500ms
+                            class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded shadow-sm" role="alert">
+                        <div class="flex items-center mb-2">
                             <svg class="h-5 w-5 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             <p class="font-bold text-sm">Por favor corrige los siguientes errores:</p>
                         </div>
                         <ul class="list-disc list-inside text-sm ml-7">
-                            <ul class="list-disc list-inside text-sm ml-7">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
-                @endif
+@endif
 
 
                 <form action="{{ route('comisiones.store') }}" method="POST">
                     @csrf
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8" x-data="{ mostrarModal: false, comisionSeleccionada: '', colorSeleccionado: 'transparent', comisionTexto: '-- Seleccione una --', dropdownAbierto: false, nuevoColor: '#3B82F6', nuevaComisionNombre: '', mensajeError: '' }">
+                    <!-- Se actualizó comisionSeleccionada con old() para recordar la opción -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8" x-data="{ mostrarModal: false, comisionSeleccionada: '{{ old('comision_id', '') }}', colorSeleccionado: '{{ old('color_comision', 'transparent') }}', comisionTexto: '-- Seleccione una --', dropdownAbierto: false, nuevoColor: '#3B82F6', nuevaComisionNombre: '', mensajeError: '' }">
                         <div>
                             <h2 class="text-lg font-bold mb-4">Nombres</h2>
                             <p class="text-sm text-gray-600 mb-4">Seleccione el nombre de los docentes que conformarán la comisión</p>
@@ -35,7 +35,8 @@
                             @foreach($docentes as $docente)
                                 <div>
                                     <label class="inline-flex items-center cursor-pointer">
-                                        <input type="checkbox" name="docentes[]" value="{{ $docente->id }}" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
+                                        <!-- Se agregó la condición old() para recordar el checkbox -->
+                                        <input type="checkbox" name="docentes[]" value="{{ $docente->id }}" {{ (is_array(old('docentes')) && in_array($docente->id, old('docentes'))) ? 'checked' : '' }} class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
                                         <span class="ml-2">{{ $docente->name_one }} {{ $docente->name_two}} {{ $docente->last_name_one }} </span>
                                     </label>
                                 </div>
@@ -51,19 +52,20 @@
                             <select name="comision_id" x-model="comisionSeleccionada" x-on:change="if($event.target.value === 'nueva') { mostrarModal = true; } colorSeleccionado = $event.target.options[$event.target.selectedIndex].dataset.color;" 
                                     class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-indigo-500 focus:ring-indigo-500 mb-4">
                                 
-                                <option value="" disabled selected data-color="transparent"> Elija la comision </option>
+                                <option value="" disabled {{ old('comision_id') ? '' : 'selected' }} data-color="transparent"> Elija la comision </option>
                                 @foreach ($comisiones as $comision)
-                                    <option value="{{ $comision->id }}" data-color="{{ $comision->color_comision ?? '#4B5563' }}">
+                                    <option value="{{ $comision->id }}" data-color="{{ $comision->color_comision ?? '#4B5563' }}" {{ old('comision_id') == $comision->id ? 'selected' : '' }}>
                                         {{ $comision->name_comision }}
                                     </option>
                                 @endforeach
-                                <option value="nueva" data-color="transparent" class="font-bold text-green-600">+ Añadir nueva comisión...</option>
+                                <option value="nueva" data-color="transparent" class="font-bold text-green-600" {{ old('comision_id') == 'nueva' ? 'selected' : '' }}>+ Añadir nueva comisión...</option>
                             </select>
                             <label class="block text-gray-700 text-sm font-bold mb-2">Ciclo</label>
-                            <input type="date" name="ciclo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-indigo-500 focus:ring-indigo-500 mb-6">
+                            <input type="date" name="ciclo" value="{{ old('ciclo') }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-indigo-500 focus:ring-indigo-500 mb-6">
 
                             <div class="flex items-center mt-4 gap-3">
                                 <label class="block text-gray-700 text-sm font-bold">Color: </label>
+                                <input type="hidden" name="color_comision" :value="colorSeleccionado">
                                 <div style="width: 35px; height: 35px; border-radius: 70%;" 
                                     class="border border-gray-400 shadow-md transition-colors duration-200" 
                                     :style="{ backgroundColor: colorSeleccionado }">
@@ -177,7 +179,7 @@
 
                 </div>
 
-                <div class="flex items-center justify-center gap-4 mt-6">
+                <div class="flex items-center justify-center gap-5 mt-6">
                     <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out">
                         CREAR COMISIÓN
                     </button>

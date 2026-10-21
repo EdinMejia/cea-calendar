@@ -123,8 +123,16 @@ class ComisionController extends Controller
         $request->validate([
             'docentes' => 'required|array',
             'ciclo' => 'required|date',
-            'name_comision' => 'required|string|max:75',
+            'name_comision' => 'required|string|max:75|unique:comisions,name_comision,' .$id,
             'color_comision' => 'required|string|max:8',
+        ], [
+            'name_comision.required' => 'El nombre de la comisión es obligatorio.',
+            'name_comision.unique'   => 'Ya existe una comisión registrada con este nombre.',
+            'name_comision.max'      => 'El nombre no puede superar los 255 caracteres.',
+
+            'ciclo_comision.required' => 'Por favor, selecciona o escribe el ciclo.',
+            'color_comision.required' => 'Debes elegir un color para identificar la comisión.'
+
         ]);
 
         $comision = Comision::findOrFail($id);
@@ -142,8 +150,12 @@ class ComisionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Comision $comision)
+    public function destroy($id)
     {
-        //
+        $comision = Comision::findOrFail($id);
+        $comision->docentes()->detach();
+
+        return redirect()->route('comisiones.index')
+            ->with('success', 'La comision ha sido eliminada de forma permamente');
     }
 }
