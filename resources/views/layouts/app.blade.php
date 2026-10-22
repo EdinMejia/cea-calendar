@@ -20,8 +20,7 @@
             <aside :class="sidebarAbierto ? 'w-64' : 'w-20'" class="flex flex-col border-r-2 border-black z-20 transition-all duration-300 flex-shrink-0" style="background-color: #83C152;"> 
                 
                 <div class="p-4 flex items-center justify-between border-b border-black/30">
-                    <!-- Ocultar título si está cerrado -->
-                    <h2 x-show="sidebarAbierto" class="text-white text-sm font-bold uppercase leading-tight tracking-wide whitespace-nowrap overflow-hidden transition-opacity duration-300">
+                    <h2 x-show="sidebarAbierto" class="text-center text-white font-bold uppercase leading-tight tracking-wide whitespace-nowrap overflow-hidden transition-opacity duration-300">
                         Centro de Estudios <br>Avanzados de <br>TOTONICAPÁN
                     </h2>
                     
@@ -54,9 +53,9 @@
 
                 <div class="p-4 flex flex-col items-center border-t border-black/30 overflow-hidden" :class="!sidebarAbierto ? 'px-2' : ''">
     
-                        <!-- Trae el nombre real de la base de datos. Si está vacío o falla, dice "DOCENTE CEA" -->
+                        <!-- Trae el nombre real de la base de datos. Si está vacío o falla, dice DOCENTE CEA -->
                     <p x-show="sidebarAbierto" class="text-white text-sm font-bold mb-1 whitespace-nowrap">
-                        {{ Auth::user()->name ?? 'DOCENTE CEA' }}
+                        {{ Auth::user()->name_one . ' ' . Auth::user()->last_name_one ?: 'USUARIO CEA' }}
                     </p>
     
                         <!-- Trae el correo real de la base de datos -->
@@ -66,7 +65,6 @@
     
                     <form method="POST" action="{{ route('logout') }}" class="w-full flex justify-center">
                         @csrf
-                        <!-- Se agregó 'justify-center' para que el texto "Cerrar sesión" quede perfectamente en medio -->
                         <button type="submit" :class="sidebarAbierto ? 'px-4 w-full' : 'px-0 justify-center w-10 h-10'" class="py-1.5 text-xs font-bold text-white bg-blue-900 border border-black shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center overflow-hidden">
                             <!-- Texto si está abierto -->
                             <span x-show="sidebarAbierto" class="whitespace-nowrap">Cerrar sesión</span>
@@ -82,7 +80,7 @@
                 
                 <header class="border-b-2 border-black z-10 w-full" style="background-color: #83C152;">
                     <div class="py-3 px-6 text-center">
-                        <h1 class="text-lg font-normal text-black">
+                        <h1 class="text-lg font-aril text-black">
                             Calendario Escolar CEA Totonicapán
                         </h1>
                     </div>

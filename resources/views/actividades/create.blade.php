@@ -16,17 +16,18 @@
                 <div>
                     <label class="mb-1 block text-sm font-medium text-slate-700">Nombre de la actividad</label>
                     <input type="text" name="nombre" maxlength="100"
-                           placeholder="Ej: Reunión con coordinadores de carrera"
-                           value="{{ old('nombre') }}"
-                           class="w-full rounded border px-3 py-2 @error('nombre') border-red-500 @else border-gray-400 @enderror">
+                        placeholder="Ej: Reunión con coordinadores de carrera"
+                        value="{{ old('nombre') }}"
+                        class="w-full rounded border px-3 py-2 @error('nombre') border-red-500 @else border-gray-400 @enderror">
                     @error('nombre') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
                     <label class="mb-1 block text-sm font-medium text-slate-700">Lugar</label>
                     <input type="text" name="lugar" maxlength="100"
-                           value="{{ old('lugar') }}"
-                           class="w-full rounded border px-3 py-2 @error('lugar') border-red-500 @else border-gray-400 @enderror">
+                        placeholder="Ej: Salon de maestros"
+                        value="{{ old('lugar') }}"
+                        class="w-full rounded border px-3 py-2 @error('lugar') border-red-500 @else border-gray-400 @enderror">
                     @error('lugar') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
 
@@ -52,38 +53,39 @@
                 <div>
                     <label class="mb-1 block text-sm font-medium text-slate-700">Fecha y Hora Inicio</label>
                     <input type="datetime-local" name="hora_fecha"
-                           value="{{ old('hora_fecha') }}"
-                           class="w-full rounded border px-3 py-2 @error('hora_fecha') border-red-500 @else border-gray-400 @enderror">
+                        value="{{ old('hora_fecha') }}"
+                        class="w-full rounded border px-3 py-2 @error('hora_fecha') border-red-500 @else border-gray-400 @enderror">
                     @error('hora_fecha') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
                     <label class="mb-1 block text-sm font-medium text-slate-700">Hora de Finalización</label>
                     <input type="time" name="hora_finalizacion"
-                           value="{{ old('hora_finalizacion') }}"
-                           class="w-full rounded border px-3 py-2 @error('hora_finalizacion') border-red-500 @else border-gray-400 @enderror">
+                        value="{{ old('hora_finalizacion') }}"
+                        class="w-full rounded border px-3 py-2 @error('hora_finalizacion') border-red-500 @else border-gray-400 @enderror">
                     @error('hora_finalizacion') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
                     <label class="mb-1 block text-sm font-medium text-slate-700">Descripción</label>
                     <textarea name="descripcion" rows="4" maxlength="200"
-                              class="w-full rounded border px-3 py-2 @error('descripcion') border-red-500 @else border-gray-400 @enderror">{{ old('descripcion') }}</textarea>
+                        placeholder="Ej: Llevar cuadros de asistencia de alumnos y notas "
+                        class="w-full rounded border px-3 py-2 @error('descripcion') border-red-500 @else border-gray-400 @enderror">{{ old('descripcion') }}</textarea>
                     @error('descripcion') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
                     <label class="mb-1 block text-sm font-medium text-slate-700">Color</label>
                     <span id="colorComision"
-                          class="inline-block h-10 w-10 rounded-full border border-gray-500"
-                          style="background:#cccccc;"></span>
+                        class="inline-block h-10 w-10 rounded-full border border-gray-500"
+                        style="background:#cccccc;"></span>
                 </div>
             </div>
         </div>
 
         <div class="mt-12 flex justify-center gap-16">
             <a href="{{ route('dashboard') }}"
-               class="rounded bg-red-600 px-8 py-2 font-bold text-white shadow hover:bg-red-700">
+                class="rounded bg-red-600 px-8 py-2 font-bold text-white shadow hover:bg-red-700">
                 Cancelar
             </a>
             <button type="submit"
