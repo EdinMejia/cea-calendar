@@ -4,15 +4,27 @@
             {{ __('Solicitudes') }}
         </h2>
     </x-slot>
-    
+    {{-- para poner el las demas acciones  --}}
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
-        </div>
-    </div>
+    {{-- esto ee para mover la distancia entre acciones  --}}
+    <form method="GET" action="{{ route('dashboard') }}"
+          class="flex flex-wrap items-center gap-4">
+
+        {{-- Ver como --}}
+            <select name="vista"
+                    class="w-52 border border-black bg-white px-2 py-1.5 text-sm">
+                <option value="">Ver como:</option>
+                <option value="dias" @selected(request('vista') === 'dias')>Días con actividades</option>
+                <option value="mes"  @selected(request('vista') === 'mes')>Mes con actividades</option>
+            </select>
+        
+        {{-- Crear nueva actividad --}}
+            <a href="{{ route('actividades.create') }}"
+            class="border border-black bg-green-700 px-3 py-1.5 text-xs font-bold text-white shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_rgba(0,0,0,1)]">
+                Crear nueva actividad
+            </a>
+    </form>
+
+
 </x-app-layout>
+

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ComisionController;
+use App\Http\Controllers\ActividadController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,7 +24,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/comisiones/{id}', [ComisionController::class, 'update'])->name('comisiones.update');
     Route::get('/comisiones/{id}/editar', [ComisionController::class, 'edit'])->name('comisiones.edit');
     Route::delete('comisiones/{id}', [ComisionController::class, 'destroy'])->name('comisiones.destroy'); 
-    
+    Route::get('/actividades/crear', [ActividadController::class, 'create'])->name('actividades.create');
+    Route::post('/actividades', [ActividadController::class, 'store'])->name('actividades.store');
 });
 
 
