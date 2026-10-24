@@ -36,4 +36,10 @@ class ActividadController extends Controller
         return redirect()->route('actividades.create')
             ->with('success', 'Actividad crada correctamente');
     }
+
+    public function index()
+    {
+        $actividades = Actividad::with('comision')->get(); 
+        return view('actividades.index', compact('actividades'));
+    }
 }

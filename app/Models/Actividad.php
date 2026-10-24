@@ -16,7 +16,7 @@ class Actividad extends Model
     protected $casts = ['hora_facha' => 'datatime'];
 
     public function comision(){
-        return $this->belongsTo(Comision::class< 'comisiones_id');
+        return $this->belongsTo(Comision::class, 'comisiones_id');
     }
 
     public function user(){
