@@ -25,7 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/comisiones/ajax', [ComisionController::class, 'storeAjax'])->name('comisiones.ajax');
     Route::put('/comisiones/{id}', [ComisionController::class, 'update'])->name('comisiones.update');
     Route::get('/comisiones/{id}/editar', [ComisionController::class, 'edit'])->name('comisiones.edit');
-    Route::delete('comisiones/{id}', [ComisionController::class, 'destroy'])->name('comisiones.destroy');
+    Route::delete('/comisiones/{id}', [ComisionController::class, 'destroy'])->name('comisiones.destroy');
     Route::get('/actividades', [ActividadController::class, 'index'])->name('actividades.index');
     Route::get('/actividades/crear', [ActividadController::class, 'create'])->name('actividades.create');
     Route::post('/actividades', [ActividadController::class, 'store'])->name('actividades.store');

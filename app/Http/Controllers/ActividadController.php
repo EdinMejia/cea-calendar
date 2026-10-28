@@ -39,7 +39,7 @@ class ActividadController extends Controller
 
     public function index()
     {
-        $actividades = Actividad::with('comision')->get(); 
+        $actividades = Actividad::with('comision')->get();
         return view('actividades.index', compact('actividades'));
     }
 }

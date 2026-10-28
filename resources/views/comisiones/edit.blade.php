@@ -38,7 +38,6 @@
                                 @foreach($docentes as $docente)
                                     <div>
                                         <label class="inline-flex items-center cursor-pointer">
-                                            <!-- Aquí está la magia: revisa si el docente ya pertenece a la comisión para marcarlo -->
                                             <input type="checkbox" name="docentes[]" value="{{ $docente->id }}" 
                                                 {{ $comision->docentes->contains($docente->id) ? 'checked' : '' }}
                                                 class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">

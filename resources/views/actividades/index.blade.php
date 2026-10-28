@@ -10,9 +10,6 @@
                 <!-- CONTENEDOR GRID -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-                    <!-- ======================================================== -->
-                    <!-- INICIO DEL BUCLE: Esto multiplicará la tarjeta -->
-                    <!-- ======================================================== -->
                     @forelse($actividades as $actividad)
                         
                         <div class="flex flex-col gap-2 w-full max-w-sm mx-auto">
@@ -24,7 +21,6 @@
                                 </h3>
                             </div>
 
-                            <!-- 2. BLOQUE DEL CONTENIDO -->
                             <div class="border-2 border-black p-3 text-center" style="background-color: {{ $actividad->comision->color_comision ?? '#3B82F6' }};">
 
                                 <!-- Dato: Fecha y Hora de Inicio -->
@@ -88,10 +84,6 @@
                             <p class="text-xl font-bold text-gray-500">No hay actividades registradas aún.</p>
                         </div>
                     @endforelse
-                    <!-- ======================================================== -->
-                    <!-- FIN DEL BUCLE -->
-                    <!-- ======================================================== -->
-
                 </div>
             </div>
         </div>
