@@ -1,5 +1,17 @@
 <x-app-layout>
     <div class="py-12">
+
+            @if (session('error'))
+                <div class="bg-red-600 text-white font-bold p-4 mb-6 border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            @if (session('success'))
+                <div class="bg-green-600 text-white font-bold p-4 mb-6 border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+                    {{ session('success') }}
+                </div>
+            @endif
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
             {{-- Encabezado --}}

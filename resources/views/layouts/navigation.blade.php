@@ -48,7 +48,7 @@
 
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
-                                                this.closest('form').submit();">
+                                    this.closest('form').submit();">
                                 {{ __('Cerrar Sesion') }}
                             </x-dropdown-link>
                         </form>
@@ -74,7 +74,7 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard.*')">
                 Inicio
             </x-responsive-nav-link>
-
+            
             <x-responsive-nav-link :href="route('comisiones.index')" :active="request()->routeIs('comisiones.index')">
             Docentes y Comisiones
             </x-responsive-nav-link>

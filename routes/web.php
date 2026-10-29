@@ -4,17 +4,24 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ComisionController;
 use App\Http\Controllers\ActividadController;
-use App\Models\Actividad; 
+use App\Models\Actividad;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::get('/dashboard', function () {
-    $actividades = Actividad::with('comision')->get();
+    $actividades = Actividad::with('comision')->proximas()->orderBy('hora_fecha', 'asc')->get();
     return view('dashboard', compact('actividades'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/actividades/historial', [ActividadController::class, 'historial'])
+    ->middleware(['auth', 'verified'])
+    ->name('actividades.historial');
+
+Route::resource('actividades', ActividadController::class)
+    ->middleware(['auth', 'verified']);
+    
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

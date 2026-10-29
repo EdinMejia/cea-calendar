@@ -10,7 +10,7 @@
         <form method="GET" action="{{ route('dashboard') }}" class="flex flex-wrap items-center gap-4 mb-8">
 
             {{-- Ver como --}}
-            <select name="vista" onchange="this.form.submit()" class="w-52 border-2 border-black bg-white px-2 py-1.5 text-sm font-bold shadow-[2px_2px_0px_rgba(0,0,0,1)] outline-none">
+            <select name="vista" id="vista-select" aria-label="Seleccionar vista" onchange="this.form.submit()" class="w-52 border-2 border-black bg-white px-2 py-1.5 text-sm font-bold shadow-[2px_2px_0px_rgba(0,0,0,1)] outline-none">
                 <option value="">Ver como:</option>
                 <option value="dias" @selected(request('vista') === 'dias')>Días con actividades</option>
                 <option value="mes"  @selected(request('vista') === 'mes')>Mes con actividades</option>
@@ -23,14 +23,17 @@
 
             {{-- Buscador Reactivo --}}
             <div class="flex-grow max-w-md ml-auto">
-                <div class="relative">
+                <div class="relative w-full md:w-77">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                         <svg class="w-4 h-4 text-black font-bold" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/></svg>
                     </div>
-                    <!-- El ID 'buscador-actividades' es el que conecta con el script de abajo -->
-                    <input type="text" id="buscador-actividades" autocomplete="off" placeholder="Buscador..." class="w-full border-2 border-black bg-white pl-10 pr-3 py-1.5 text-sm font-bold shadow-[2px_2px_0px_rgba(0,0,0,1)] outline-none focus:ring-0">
+                    <input type="text" id="buscador-actividades" aria-label="Buscar actividades"autocomplete="off" placeholder="Buscador..." class="w-full border-2 border-black bg-white pl-10 pr-3 py-1.5 text-sm font-bold shadow-[2px_2px_0px_rgba(0,0,0,1)] outline-none focus:ring-0">
                 </div>
             </div>
+
+            <a href="{{ route('actividades.historial') }}" class="border-2 border-black bg-orange-700 px-3 py-1.5 text-sm font-bold text-white shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_rgba(0,0,0,1)]">
+                Historial de Actividades
+            </a>
             
         </form>
 
@@ -43,18 +46,17 @@
                     $datosBusqueda = strtolower($actividad->nombre . ' ' . $actividad->lugar . ' ' . ($actividad->comision->name_comision ?? ''));
                 @endphp
                 
-                <!-- Tarjeta con la clase 'articulo-tarjeta' y el atributo 'data-busqueda' -->
                 <div class="articulo-tarjeta flex flex-col gap-2 w-full max-w-sm mx-auto transition-transform hover:-translate-y-1" data-busqueda="{{ $datosBusqueda }}">
                     
                     <!-- Título -->
-                    <div class="border-2 border-black p-3 text-center" style="background-color: {{ $colorFondo }};">
+                    <div class="border-2 border-black p-3 text-center" {!! 'style="background-color: ' . $colorFondo . ';"' !!}>
                         <h3 class="text-black font-bold text-base leading-tight uppercase">
                             Nombre:<br>{{ $actividad->nombre }}
                         </h3>
                     </div>
 
                     <!-- Contenido -->
-                    <div class="border-2 border-black p-4 flex flex-col gap-4" style="background-color: {{ $colorFondo }};">
+                    <div class="border-2 border-black p-4 flex flex-col gap-4" {!! 'style="background-color: ' . $colorFondo . ';"' !!}>
                         
                         <div>
                             <div class="flex items-center gap-2 mb-1">
@@ -97,7 +99,7 @@
                         </div>
 
                         <div class="flex justify-end mt-1">
-                            <a href="#" class="bg-white border-2 border-black px-3 py-1 text-xs font-bold text-black shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_rgba(0,0,0,1)]">
+                            <a href="{{ route('actividades.show', $actividad->id)}}" class="bg-white border-2 border-black px-3 py-1 text-xs font-bold text-black shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_rgba(0,0,0,1)]">
                                 Más....
                             </a>
                         </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Comision;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Redirect;
 
 class ComisionController extends Controller
 {
@@ -139,7 +140,12 @@ class ComisionController extends Controller
     public function destroy($id)
     {
         $comision = Comision::findOrFail($id);
+        if ($comision->actividades()->exists()) {
+            return redirect()->route('comisiones.index')
+                ->with('error', 'no se puede eliminar: la comision tiene actividades registradas.');
+        }
         $comision->docentes()->detach();
+        $comision->delete();
 
         return redirect()->route('comisiones.index')
             ->with('success', 'La comision ha sido eliminada de forma permamente');
