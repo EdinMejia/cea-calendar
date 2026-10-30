@@ -68,15 +68,15 @@
             </div>
 
             <!-- Botones de Acción (Volver, Editar, Eliminar) -->
-            <div class="mt-8 flex justify-between items-center">
-                
-                <div class="flex gap-4">
-                    <!-- Botón Volver (Verde) -->
-                    <a href="{{ route('dashboard') }}" class="bg-green-600 text-white font-bold border-2 border-black px-6 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
-                        Volver
-                    </a>
+            <div class="mt-8 flex w-full flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <!-- Botón Volver (Verde) -->
+                <a href="{{ route('dashboard') }}" class="bg-green-600 text-white font-bold border-2 border-black px-6 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
+                    Volver
+                </a>
+
+                <div class="grid grid-cols-2 gap-3 w-full sm:w-auto sm:flex sm:gap-4 sm:ml-auto">
                     <!-- Botón Editar (Azul) -->
-                    <a href="{{ route('actividades.edit', $actividad->id) }}" class="bg-blue-600 text-white font-bold border-2 border-black px-6 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
+                    <a href="{{ route('actividades.edit', $actividad->id) }}" class="w-full sm:w-auto text-center bg-blue-600 text-white font-bold border-2 border-black px-6 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
                         Editar 
                     </a>
 
@@ -84,7 +84,7 @@
                     <form action="{{ route('actividades.destroy', $actividad->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta actividad?');">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="bg-red-600 text-white font-bold border-2 border-black px-6 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
+                        <button type="submit" class="w-full sm:w-auto bg-red-600 text-white font-bold border-2 border-black px-6 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
                             Eliminar 
                         </button>
                     </form>
