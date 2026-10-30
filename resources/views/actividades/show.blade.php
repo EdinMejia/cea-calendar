@@ -77,7 +77,7 @@
                 <div class="flex gap-4">
                     <!-- Botón Editar (Azul) -->
                     <a href="{{ route('actividades.edit', $actividad->id) }}" class="bg-blue-600 text-white font-bold border-2 border-black px-6 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
-                        Editar Actividad
+                        Editar 
                     </a>
 
                     <!-- Botón Eliminar (Rojo) -->
@@ -85,7 +85,7 @@
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="bg-red-600 text-white font-bold border-2 border-black px-6 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
-                            Eliminar actividad
+                            Eliminar 
                         </button>
                     </form>
                 </div>
