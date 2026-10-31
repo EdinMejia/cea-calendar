@@ -36,8 +36,8 @@
             </a>
             
         </form>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6" id="contenedor-tarjetas">
+    # Pone todas las tarjetas en una sola fila y activa el scroll de izquierda a derecha cuando no caben
+        <div class="flex gap-6 overflow-x-auto pb-4" id="contenedor-tarjetas">
             
             @forelse($actividades as $actividad)
                 @php
@@ -45,9 +45,8 @@
                     // Creamos un string con el nombre, lugar y comisión para que el buscador encuentre por cualquiera de esos datos
                     $datosBusqueda = strtolower($actividad->nombre . ' ' . $actividad->lugar . ' ' . ($actividad->comision->name_comision ?? ''));
                 @endphp
-                
-                <div class="articulo-tarjeta flex flex-col gap-2 w-full max-w-sm mx-auto transition-transform hover:-translate-y-1" data-busqueda="{{ $datosBusqueda }}">
-                    
+                # Les da el mismo ancho a todas las targetas y evita que se aplasten, para que se deslicen en vez de encogerse
+                <div class="articulo-tarjeta flex flex-col gap-2 w-64 flex-shrink-0 transition-transform hover:-translate-y-1" data-busqueda="{{ $datosBusqueda }}">
                     <!-- Título -->
                     <div class="border-2 border-black p-3 text-center" {!! 'style="background-color: ' . $colorFondo . ';"' !!}>
                         <h3 class="text-black font-bold text-base leading-tight uppercase">
@@ -107,7 +106,8 @@
                     </div>
                 </div>
             @empty
-                <div class="col-span-full text-center py-10">
+                # Hace que el aviso “No hay actividades registradas aún” ocupe todo el ancho y quede centrado
+                <div class="w-full text-center py-10">
                     <p class="text-xl font-bold text-gray-500">No hay actividades registradas aún.</p>
                 </div>
             @endforelse
