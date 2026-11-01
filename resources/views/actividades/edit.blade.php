@@ -3,7 +3,7 @@
 
     <h2 class="mb-8 text-2xl font-semibold text-slate-800">
         Editar Actividad: Actualice la información.
-    </h2>
+    </h2> 
 
     <form action="{{ route('actividades.update', $actividad->id) }}" method="POST"
         onsubmit="this.querySelector('[type=submit]').disabled = true;">

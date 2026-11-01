@@ -59,8 +59,10 @@
     @else
         {{-- ========== VISTA DE TARJETAS ========== --}}
 
-        <div id="contenedor-tarjetas" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+        {{-- Tarjetas en una fila con scroll horizontal --}}
+        <div id="contenedor-tarjetas" class="flex gap-6 overflow-x-auto pb-4">
             @forelse ($actividades as $actividad)
+            
                 @php
                     $color = $actividad->comision?->color_css ?? '#3B82F6';
                     $textoColor = $actividad->comision?->color_texto ?? '#000000';
@@ -75,10 +77,12 @@
                         ['Encargado - comisión:', $actividad->comision?->name_comision ?? 'Sin asignar', 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'],
                     ];
                 @endphp
-
-                <article class="articulo-tarjeta mx-auto flex w-full max-w-sm flex-col gap-2" data-busqueda="{{ $busqueda }}">
-                    <div class="break-words border-2 border-black p-3 text-center" style="background-color: {{ $color }};">
-                        <h3 class="text-base font-bold uppercase leading-tight" style="color: {{ $textoColor }};">
+                
+                {{-- Les da el mismo ancho a todas las tarjetas y evita que se aplasten, para que se deslicen en vez de encogerse --}}
+                <div class="articulo-tarjeta flex flex-col gap-2 w-64 flex-shrink-0 transition-transform hover:-translate-y-1" data-busqueda="{{ $busqueda }}">
+                    <!-- Título -->
+                    <div class="border-2 border-black p-3 text-center" style="background-color: {{ $color }};">
+                        <h3 class="text-black font-bold text-base leading-tight uppercase">
                             Nombre:<br>{{ $actividad->nombre }}
                         </h3>
                     </div>
@@ -107,11 +111,12 @@
                             </div>
                         @endif
                     </div>
-                </article>
+                </div>
             @empty
-                <p class="col-span-full py-10 text-center text-xl font-bold text-gray-500">
-                    No hay actividades registradas aún.
-                </p>
+
+                <div class="w-full text-center py-10">
+                    <p class="text-xl font-bold text-gray-500">No hay actividades registradas aún.</p>
+                </div>
             @endforelse
 
             <p id="sin-resultados" class="col-span-full hidden py-10 text-center text-xl font-bold text-gray-500">

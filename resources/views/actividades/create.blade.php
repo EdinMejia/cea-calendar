@@ -87,11 +87,11 @@
 
         <div class="mt-12 flex flex-wrap justify-center gap-4 sm:gap-16">
             <a href="{{ route('dashboard') }}"
-                class="rounded bg-red-600 px-8 py-2 font-bold text-white shadow hover:bg-red-700">
+                class="bg-red-600 text-white font-bold border-2 border-black px-4 sm:px-6 py-2 text-sm sm:text-base shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
                 Cancelar
             </a>
             <button type="submit"
-                    class="rounded bg-blue-600 px-8 py-2 font-bold text-white shadow hover:bg-blue-700">
+                class="bg-blue-600 text-white font-bold border-2 border-black px-4 sm:px-6 py-2 text-sm sm:text-base shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
                 Guardar Actividad
             </button>
         </div>
