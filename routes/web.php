@@ -5,15 +5,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ComisionController;
 use App\Http\Controllers\ActividadController;
 use App\Models\Actividad;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    $actividades = Actividad::with('comision')->proximas()->orderBy('hora_fecha', 'asc')->get();
-    return view('dashboard', compact('actividades'));
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
 Route::get('/actividades/historial', [ActividadController::class, 'historial'])
     ->middleware(['auth', 'verified'])

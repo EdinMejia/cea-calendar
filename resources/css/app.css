@@ -1,3 +1,56 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ===== FullCalendar con el estilo CEA ===== */
+:root {
+    --fc-border-color: #000000;
+    --fc-button-bg-color: #15803d;
+    --fc-button-border-color: #000000;
+    --fc-button-hover-bg-color: #166534;
+    --fc-button-hover-border-color: #000000;
+    --fc-button-active-bg-color: #14532d;
+    --fc-button-active-border-color: #000000;
+    --fc-today-bg-color: rgba(131, 193, 82, 0.25);
+}
+
+#calendario-cea .fc { font-family: inherit; }
+
+#calendario-cea .fc-toolbar-title { text-transform: capitalize; font-weight: 800; }
+#calendario-cea .fc-col-header-cell-cushion,
+#calendario-cea .fc-daygrid-day-number { color: #000; font-weight: 700; }
+#calendario-cea .fc-col-header-cell-cushion { text-transform: uppercase; }
+
+#calendario-cea .fc-button {
+    min-height: 2.5rem;
+    border-width: 2px;
+    border-radius: 0;
+    font-weight: 700;
+    text-transform: uppercase;
+    box-shadow: 2px 2px 0 #000;
+}
+#calendario-cea .fc-button:hover,
+#calendario-cea .fc-button-active {
+    transform: translateY(1px);
+    box-shadow: 1px 1px 0 #000;
+}
+
+#calendario-cea .fc-event {
+    border-radius: 0;
+    font-weight: 700;
+    padding: 1px 3px;
+    cursor: pointer;
+}
+
+/* Bordes gruesos solo desde tabletas */
+@media (min-width: 640px) {
+    #calendario-cea .fc-theme-standard td,
+    #calendario-cea .fc-theme-standard th,
+    #calendario-cea .fc-theme-standard .fc-scrollgrid { border-width: 2px; }
+}
+
+/* Teléfono */
+@media (max-width: 639px) {
+    #calendario-cea .fc-toolbar { flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
+    #calendario-cea .fc-toolbar-title { font-size: 1.1rem; }
+}
