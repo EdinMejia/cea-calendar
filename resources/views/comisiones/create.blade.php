@@ -22,7 +22,6 @@
                     </div>
 @endif
 
-
                 <form action="{{ route('comisiones.store') }}" method="POST">
                     @csrf
                     <!-- Se actualizó comisionSeleccionada con old() para recordar la opción -->
@@ -47,9 +46,9 @@
                     <div>
                         <div class="mb-4 border p-4 rounded bg-gray-50">
                             
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Seleccione la Comisión</label>
+                            <label for="comision_id" class="block text-gray-700 text-sm font-bold mb-2">Seleccione la Comisión</label>
                             
-                            <select name="comision_id" x-model="comisionSeleccionada" x-on:change="if($event.target.value === 'nueva') { mostrarModal = true; } colorSeleccionado = $event.target.options[$event.target.selectedIndex].dataset.color;" 
+                            <select id="comision_id" name="comision_id" x-model="comisionSeleccionada" x-on:change="if($event.target.value === 'nueva') { mostrarModal = true; } colorSeleccionado = $event.target.options[$event.target.selectedIndex].dataset.color;" 
                                     class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-indigo-500 focus:ring-indigo-500 mb-4">
                                 
                                 <option value="" disabled {{ old('comision_id') ? '' : 'selected' }} data-color="transparent"> Elija la comision </option>
@@ -60,12 +59,12 @@
                                 @endforeach
                                 <option value="nueva" data-color="transparent" class="font-bold text-green-600" {{ old('comision_id') == 'nueva' ? 'selected' : '' }}>+ Añadir nueva comisión...</option>
                             </select>
-                            <label class="block text-gray-700 text-sm font-bold mb-2">Ciclo</label>
-                            <input type="date" name="ciclo" value="{{ old('ciclo') }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-indigo-500 focus:ring-indigo-500 mb-6">
+                            <label for="ciclo" class="block text-gray-700 text-sm font-bold mb-2">Ciclo</label>
+                            <input for="ciclo" id="ciclo" type="date" name="ciclo" value="{{ old('ciclo') }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-indigo-500 focus:ring-indigo-500 mb-6">
 
                             <div class="flex items-center mt-4 gap-3">
-                                <label class="block text-gray-700 text-sm font-bold">Color: </label>
-                                <input type="hidden" name="color_comision" :value="colorSeleccionado">
+                                <label for="color_comision" class="block text-gray-700 text-sm font-bold">Color: </label>
+                                <input for="color_comision" id="color_comision" type="hidden" name="color_comision" :value="colorSeleccionado">
                                 <div style="width: 35px; height: 35px; border-radius: 70%;" 
                                     class="border border-gray-400 shadow-md transition-colors duration-200" 
                                     :style="{ backgroundColor: colorSeleccionado }">
@@ -87,17 +86,16 @@
                             </div>
 
                             <div class="mb-4">
-                                <label class="block text-gray-700 text-sm font-bold mb-2">
+                                <label for="nueva_comision_nombre" class="block text-gray-700 text-sm font-bold mb-2">
                                     Nombre de la nueva comisión
                                 </label>
-                                <input type="text" name="nueva_comision_nombre" placeholder="Ej. Festividades" x-model="nuevaComisionNombre"
+                                <input type="text" id="nueva_comision_nombre" name="nueva_comision_nombre" placeholder="Ej. Festividades" x-model="nuevaComisionNombre"
                                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-indigo-500 focus:shadow-outline">
 
-                                <label class="mb-4">
-                                    <label class="block text-gray-700 text-sm font-bold mb-2">
-                                        Color de la nueva comisión
+                                <label for="color_nueva_comision" class="block text-gray-700 text-sm font-bold mb-2">
+                                    Color de la nueva comisión
                                 </label>
-                                <input type="hidden" name="color_nueva_comision" x-model="nuevoColor"> 
+                                <input type="hidden" id="color_nueva_comision" name="color_nueva_comision" x-model="nuevoColor"> 
 
                                 <div class="flex gap-3 mt-2">
                                     <button type="button"

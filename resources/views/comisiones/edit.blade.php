@@ -27,7 +27,6 @@
                     @csrf
                     @method('PUT') <!-- OBLIGATORIO PARA EDITAR -->
                     
-                    <!-- Alpine.js inicia leyendo el color actual de la base de datos -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8" x-data="{ colorSeleccionado: '{{ old('color_comision', $comision->color_comision) }}', desbloquearEdicion: false }">
                         
                         <div>
@@ -37,8 +36,8 @@
                             <div class="space-y-2 border p-4 rounded bg-gray-50 max-h-64 overflow-y-auto">
                                 @foreach($docentes as $docente)
                                     <div>
-                                        <label class="inline-flex items-center cursor-pointer">
-                                            <input type="checkbox" name="docentes[]" value="{{ $docente->id }}" 
+                                        <label for="docente-{{ $docente->id }}" class="inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" id="docente-{{ $docente->id }}" name="docentes[]" value="{{ $docente->id }}"
                                                 {{ $comision->docentes->contains($docente->id) ? 'checked' : '' }}
                                                 class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
                                             <span class="ml-2">{{ $docente->name_one }} {{ $docente->name_two}} {{ $docente->last_name_one }} </span>
@@ -59,18 +58,18 @@
                                     </label>
                                 </div>
                                 
-                                <label class="block text-gray-700 text-sm font-bold mb-2">Nombre de la Comisión</label>
-                                <input type="text" name="name_comision" value="{{ old('name_comision', $comision->name_comision) }}" 
+                                <label for="name_comision" class="block text-gray-700 text-sm font-bold mb-2">Nombre de la Comisión</label>
+                                <input type="text" id="name_comision" name="name_comision" value="{{ old('name_comision', $comision->name_comision) }}" 
                                     :readonly="!desbloquearEdicion"
                                     :class="!desbloquearEdicion ? 'bg-gray-200 cursor-not-allowed text-gray-500' : 'bg-white focus:border-indigo-500 focus:ring-indigo-500'"
                                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none mb-4 transition-colors duration-300">
                                 
-                                <label class="block text-gray-700 text-sm font-bold mb-2">Ciclo</label>
-                                <input type="date" name="ciclo" value="{{ old('ciclo', $comision->ciclo_comision) }}" 
+                                <label for="ciclo" class="block text-gray-700 text-sm font-bold mb-2">Ciclo</label>
+                                <input for="ciclo" id="ciclo" type="date" name="ciclo" value="{{ old('ciclo', $comision->ciclo_comision) }}" 
                                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-indigo-500 focus:ring-indigo-500 mb-6">
 
-                                <label class="block text-gray-700 text-sm font-bold mb-2">Color de la comisión</label>
-                                <input type="hidden" name="color_comision" x-model="colorSeleccionado"> 
+                                <label for="color_comision" class="block text-gray-700 text-sm font-bold mb-2">Color de la comisión</label>
+                                <input for="color_comision" id="color_comision" type="hidden" name="color_comision" x-model="colorSeleccionado"> 
 
                                 <div x-show="!desbloquearEdicion" class="flex gap-3 mt-2 items-center">
                                     <div class="w-8 h-8 rounded-full shadow-sm border-2 border-gray-400 opacity-70" :style="`background-color: ${colorSeleccionado};`"></div>

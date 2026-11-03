@@ -40,10 +40,14 @@ class Comision extends Model
     }
     public function getColorTextoAttribute(): string
     {
-    [$r, $g, $b] = array_map('hexdec', str_split(ltrim($this->color_css, '#'), 2));
-    $luminancia = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255;
+    [$r, $g, $b] = array_map(function ($par){
+        $c = hexdec($par) / 255;
+        return $c <= 0.03928 ? $c / 12.92 : (($c + 0.055) / 1.055) ** 2.4;
+    }, str_split(ltrim($this->color_css, '#'), 2));
 
-    return $luminancia > 0.6 ? '#000000' : '#ffffff';
+    $luminancia = 0.2126 * $r + 0.7152 * $g + 0.0722 * $b;
+
+    return $luminancia > 0.179 ? '#000000' : '#ffffff';
     }
 
 }
