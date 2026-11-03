@@ -3,20 +3,19 @@
 @tailwind utilities;
 
 /* ===== FullCalendar con el estilo CEA ===== */
-:root {
-    --fc-border-color: #000000;
+#calendario-cea {
+    --fc-border-color: #000;
     --fc-button-bg-color: #15803d;
-    --fc-button-border-color: #000000;
+    --fc-button-border-color: #000;
     --fc-button-hover-bg-color: #166534;
-    --fc-button-hover-border-color: #000000;
+    --fc-button-hover-border-color: #000;
     --fc-button-active-bg-color: #14532d;
-    --fc-button-active-border-color: #000000;
+    --fc-button-active-border-color: #000;
     --fc-today-bg-color: rgba(131, 193, 82, 0.25);
+    font-family: inherit;
 }
 
-#calendario-cea .fc { font-family: inherit; }
-
-#calendario-cea .fc-toolbar-title { text-transform: capitalize; font-weight: 800; }
+#calendario-cea .fc-toolbar-title { font-weight: 800; text-transform: capitalize; }
 #calendario-cea .fc-col-header-cell-cushion,
 #calendario-cea .fc-daygrid-day-number { color: #000; font-weight: 700; }
 #calendario-cea .fc-col-header-cell-cushion { text-transform: uppercase; }
@@ -30,27 +29,51 @@
     box-shadow: 2px 2px 0 #000;
 }
 #calendario-cea .fc-button:hover,
-#calendario-cea .fc-button-active {
-    transform: translateY(1px);
-    box-shadow: 1px 1px 0 #000;
-}
+#calendario-cea .fc-button-active { transform: translateY(1px); box-shadow: 1px 1px 0 #000; }
 
-#calendario-cea .fc-event {
+/* ---- Computadora y tableta: tarjetita con el texto COMPLETO ---- */
+#calendario-cea .fc-daygrid-day-frame { min-height: 7rem; }
+
+#calendario-cea .fc-daygrid-block-event {
+    margin: 2px 3px 4px;
+    padding: 2px 4px;
+    border: 2px solid #000;
     border-radius: 0;
-    font-weight: 700;
-    padding: 1px 3px;
+    box-shadow: 2px 2px 0 #000;
     cursor: pointer;
+    white-space: normal;
 }
+#calendario-cea .fc-daygrid-block-event .fc-event-main-frame { flex-direction: column; }  /* hora arriba, nombre abajo */
+#calendario-cea .fc-daygrid-block-event .fc-event-time,
+#calendario-cea .fc-daygrid-block-event .fc-event-title {
+    overflow: visible;
+    white-space: normal;
+    text-overflow: clip;
+    overflow-wrap: anywhere;
+    font-size: 12px;
+    line-height: 1.25;
+}
+#calendario-cea .fc-daygrid-block-event .fc-event-time { font-weight: 800; }
+#calendario-cea .fc-daygrid-block-event .fc-event-title { font-weight: 700; }
 
-/* Bordes gruesos solo desde tabletas */
-@media (min-width: 640px) {
-    #calendario-cea .fc-theme-standard td,
-    #calendario-cea .fc-theme-standard th,
-    #calendario-cea .fc-theme-standard .fc-scrollgrid { border-width: 2px; }
-}
+/* ---- Vista Lista ---- */
+#calendario-cea .fc-list { border: 2px solid #000; }
+#calendario-cea .fc-list-event { cursor: pointer; }
+#calendario-cea .fc-list-day-cushion { font-weight: 800; text-transform: capitalize; }
+#calendario-cea .cea-lista-lugar { margin-top: 2px; font-size: .8rem; font-weight: 400; opacity: .85; }
 
-/* Teléfono */
-@media (max-width: 639px) {
-    #calendario-cea .fc-toolbar { flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
-    #calendario-cea .fc-toolbar-title { font-size: 1.1rem; }
-}
+/* ---- Celular: solo puntos de color (al tocar el día se abre la lista) ---- */
+#calendario-cea.cea-compacto .fc-toolbar { gap: .25rem; }
+#calendario-cea.cea-compacto .fc-toolbar-title { font-size: 1.05rem; text-align: center; }
+#calendario-cea.cea-compacto .fc-button { min-height: 2.75rem; min-width: 2.75rem; padding: 0 .9rem; }
+#calendario-cea.cea-compacto .fc-footer-toolbar { margin-top: .75rem; }
+#calendario-cea.cea-compacto .fc-col-header-cell-cushion { padding: 4px 0; font-size: .75rem; }
+#calendario-cea.cea-compacto .fc-daygrid-day-number { padding: 4px 6px; font-size: .85rem; }
+#calendario-cea.cea-compacto .fc-daygrid-day-frame { min-height: 3.5rem; }
+
+#calendario-cea.cea-compacto .fc-daygrid-day-events { display: flex; flex-wrap: wrap; gap: 2px; padding: 0 3px 3px; min-height: 0; }
+#calendario-cea.cea-compacto .fc-daygrid-event-harness { margin: 0; }
+#calendario-cea.cea-compacto .fc-daygrid-dot-event { padding: 0; min-height: 0; }
+#calendario-cea.cea-compacto .fc-daygrid-dot-event .fc-event-time,
+#calendario-cea.cea-compacto .fc-daygrid-dot-event .fc-event-title { display: none; }
+#calendario-cea.cea-compacto .fc-daygrid-event-dot { margin: 0; border-width: 6px; border-radius: 6px; }

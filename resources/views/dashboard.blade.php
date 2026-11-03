@@ -43,7 +43,7 @@
             <ul class="mb-3 flex flex-wrap gap-2" aria-label="Leyenda de comisiones">
                 @foreach ($leyenda as $c)
                     <li class="flex items-center gap-2 border-2 border-black bg-white px-2 py-1 text-xs font-bold">
-                        <span class="h-4 w-4 border border-black" style="background-color: {{ $c->color_css }};"></span>
+                        <span class="h-4 w-4 border border-black" @style(['background-color: ' . $c->color_css])></span>
                         {{ $c->name_comision }}
                     </li>
                 @endforeach
@@ -60,9 +60,9 @@
         {{-- ========== VISTA DE TARJETAS ========== --}}
 
         {{-- Tarjetas en una fila con scroll horizontal --}}
-        <div id="contenedor-tarjetas" class="flex gap-6 overflow-x-auto pb-4">
+        <div id="contenedor-tarjetas" class="flex snap-x snap-proximity gap-6 overflow-x-auto pb-4 pt-2">
             @forelse ($actividades as $actividad)
-            
+
                 @php
                     $color = $actividad->comision?->color_css ?? '#3B82F6';
                     $textoColor = $actividad->comision?->color_texto ?? '#000000';
@@ -77,24 +77,24 @@
                         ['Encargado - comisión:', $actividad->comision?->name_comision ?? 'Sin asignar', 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'],
                     ];
                 @endphp
-                
-                {{-- Les da el mismo ancho a todas las tarjetas y evita que se aplasten, para que se deslicen en vez de encogerse --}}
-                <div class="articulo-tarjeta flex flex-col gap-2 w-64 flex-shrink-0 transition-transform hover:-translate-y-1" data-busqueda="{{ $busqueda }}">
-                    <!-- Título -->
-                    <div class="border-2 border-black p-3 text-center" style="background-color: {{ $color }};">
-                        <h3 class="text-black font-bold text-base leading-tight uppercase">
+
+                {{-- Mismo ancho para todas y sin encogerse: se deslizan en vez de aplastarse --}}
+                <div class="articulo-tarjeta flex w-64 shrink-0 snap-start flex-col gap-2 transition-transform hover:-translate-y-1" data-busqueda="{{ $busqueda }}">
+
+                    <div class="break-words border-2 border-black p-3 text-center" @style(['background-color: ' . $color])>
+                        <h3 class="text-base font-bold uppercase leading-tight" @style(['color: ' . $textoColor])>
                             Nombre:<br>{{ $actividad->nombre }}
                         </h3>
                     </div>
 
-                    <div class="flex flex-col gap-4 border-2 border-black p-4" style="background-color: {{ $color }};">
+                    <div class="flex flex-col gap-4 border-2 border-black p-4" @style(['background-color: ' . $color])>
                         @foreach ($filas as [$etiqueta, $valor, $icono])
                             <div>
                                 <div class="mb-1 flex items-center gap-2">
-                                    <svg class="h-5 w-5 shrink-0" style="color: {{ $textoColor }};" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                                    <svg class="h-5 w-5 shrink-0" @style(['color: ' . $textoColor]) fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="{{ $icono }}"/>
                                     </svg>
-                                    <span class="text-sm font-bold" style="color: {{ $textoColor }};">{{ $etiqueta }}</span>
+                                    <span class="text-sm font-bold" @style(['color: ' . $textoColor])>{{ $etiqueta }}</span>
                                 </div>
                                 <div class="break-words border-2 border-black bg-white p-1.5 text-center text-sm font-medium">
                                     {{ $valor ?: '—' }}
@@ -113,13 +113,12 @@
                     </div>
                 </div>
             @empty
-
-                <div class="w-full text-center py-10">
+                <div class="w-full py-10 text-center">
                     <p class="text-xl font-bold text-gray-500">No hay actividades registradas aún.</p>
                 </div>
             @endforelse
 
-            <p id="sin-resultados" class="col-span-full hidden py-10 text-center text-xl font-bold text-gray-500">
+            <p id="sin-resultados" class="hidden w-full shrink-0 py-10 text-center text-xl font-bold text-gray-500">
                 Ninguna actividad coincide con tu búsqueda.
             </p>
         </div>
@@ -149,7 +148,7 @@
 
                 buscador.addEventListener('keydown', (e) => { if (e.key === 'Enter') e.preventDefault(); });
                 buscador.addEventListener('input', filtrar);
-                filtrar(); // aplica el texto que ya traiga el campo al cargar
+                filtrar();
             });
         </script>
     @endif

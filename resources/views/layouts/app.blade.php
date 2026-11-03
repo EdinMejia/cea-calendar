@@ -13,21 +13,17 @@
     
     <body class="bg-white font-sans text-black antialiased">
         
-        <!-- 1. MANTENIDO: Tu x-data, solo le añadimos que detecte si es PC o Celular al cargar para abrirse o cerrarse solo -->
         <div x-data="{ sidebarAbierto: window.innerWidth >= 768 }" @resize.window="sidebarAbierto = window.innerWidth >= 768" class="flex h-screen w-full border-2 border-black overflow-hidden relative">
             
-            <!-- NUEVO: Fondo oscuro que aparece en celulares al abrir el menú. Si lo tocas, se cierra. -->
             <div x-show="sidebarAbierto" x-cloak x-transition.opacity.duration.300ms @click="sidebarAbierto = false" class="fixed inset-0 bg-black/50 z-20 md:hidden"></div>
 
-            <!-- 2. MANTENIDO Y MEJORADO: El ancho cambia, pero en celular se oculta a la izquierda (-translate-x-full) y en PC se queda en w-20 -->
             <aside :class="sidebarAbierto ? 'w-64 translate-x-0' : '-translate-x-full md:translate-x-0 md:w-20'" class="fixed md:relative inset-y-0 left-0 h-full w-64 -translate-x-full md:translate-x-0 flex flex-col border-r-2 border-black z-30 transition-all duration-300 ease-in-out flex-shrink-0" style="background-color: #83C152;">
                 
                 <div class="p-4 flex items-center justify-between border-b border-black/30">
                     <h2 x-show="sidebarAbierto" class="text-center text-white font-bold uppercase leading-tight tracking-wide whitespace-nowrap overflow-hidden transition-opacity duration-300">
                         Centro de Estudios <br>Avanzados de <br>TOTONICAPÁN
                     </h2>
-                    
-                    <!-- 3. MANTENIDO: Tu botón para cerrar/abrir -->
+                
                     <button @click="sidebarAbierto = !sidebarAbierto" class="text-black hover:text-gray-800 focus:outline-none transition-transform" :class="!sidebarAbierto ? 'mx-auto' : ''">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>
@@ -75,12 +71,10 @@
                 </div>
             </aside>
 
-            <!-- ÁREA DE CONTENIDO PRINCIPAL: Agregamos min-w-0 para evitar que el contenido rompa el diseño (flex blow-out) -->
             <div class="flex-1 min-w-0 flex flex-col overflow-hidden relative bg-white">
                 
                 <header class="border-b-2 border-black z-10 w-full flex items-center justify-between px-4 md:px-6" style="background-color: #83C152;">
                     
-                    <!-- NUEVO: Botón hamburguesa solo para móviles (se oculta en PC) -->
                     <button @click="sidebarAbierto = !sidebarAbierto" class="md:hidden text-black focus:outline-none">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>

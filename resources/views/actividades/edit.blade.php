@@ -117,7 +117,7 @@
             };
 
             select.addEventListener('change', pintar);
-            pintar(); // Pinta el color inicial al cargar
+            pintar(); 
         });
     </script>
 </x-app-layout>
