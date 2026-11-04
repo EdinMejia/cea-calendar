@@ -6,6 +6,7 @@ use App\Http\Controllers\ComisionController;
 use App\Http\Controllers\ActividadController;
 use App\Models\Actividad;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UsuarioController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,6 +20,10 @@ Route::get('/actividades/historial', [ActividadController::class, 'historial'])
 
 Route::resource('actividades', ActividadController::class)
     ->middleware(['auth', 'verified']);
+
+Route::get('/usuarios', [UsuarioController::class, 'index'])
+    ->middleware(['auth'])
+    ->name('usuarios.index');
     
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
