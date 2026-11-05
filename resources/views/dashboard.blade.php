@@ -8,7 +8,7 @@
         $vistaActual = $vista;
     @endphp
 
-    <form method="GET" action="{{ route('dashboard') }}" class="mb-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+    <form method="GET" action="{{ route('dashboard') }}" class="mt-6 mb-10 flex flex-col gap-5 sm:flex-row sm:flex-wrap sm:items-center">
 
         <div class="relative order-first w-full sm:order-none sm:ml-auto sm:max-w-xs sm:flex-1">
             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
