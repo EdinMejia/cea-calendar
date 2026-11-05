@@ -1,5 +1,4 @@
 <x-app-layout>
-<x-alerta-cea />
 
     <h2 class="mb-8 text-2xl font-semibold text-slate-800">
         Crear Actividad: Complete la información.

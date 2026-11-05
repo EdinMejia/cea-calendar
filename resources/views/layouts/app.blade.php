@@ -9,6 +9,7 @@
 
         <style>[x-cloak] { display: none !important; }</style>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     
     <body class="bg-white font-sans text-black antialiased">
@@ -90,9 +91,26 @@
                 </header>
 
                 <main class="flex-1 overflow-y-auto overflow-x-hidden p-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:p-6 lg:p-8">
+                    <x-alerta-cea />
                     {{ $slot }}
                 </main>
             </div>
         </div>
+        <script>
+            document.addEventListener('submit', function (e) {
+                const form = e.target.closest('.form-eliminar');
+                if (!form) return;
+                e.preventDefault();
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: form.dataset.mensaje || '¿Seguro que desea eliminar?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar',
+                    animation: false,
+                }).then(r => { if (r.isConfirmed) form.submit(); });
+            });
+        </script>
     </body>
 </html>

@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout> 
     <div class="py-8">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             
@@ -79,7 +79,7 @@
                         Editar
                     </a>
 
-                    <form action="{{ route('actividades.destroy', $actividad->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta actividad?');">
+                    <form action="{{ route('actividades.destroy', $actividad->id) }}" method="POST" class= "form-eliminar" data-mensaje="¿Está seguro de eliminar la actividad?">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="bg-red-600 text-white font-bold border-2 border-black px-4 sm:px-6 py-2 text-sm sm:text-base shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
