@@ -151,7 +151,8 @@ if (el) {
             if (compacto() && info.view.type === 'dayGridMonth') {
                 abrirDia(info.event.start);
             } else {
-                abrirDetalle(info.event);
+                const destino = info.event.url || info.event.extendedProps.url;
+                if (destino) window.location.href = destino;
             }
         },
 

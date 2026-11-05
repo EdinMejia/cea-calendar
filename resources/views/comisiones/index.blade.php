@@ -21,7 +21,7 @@
                 </h2>
 
                 <a href="{{ route('comisiones.create') }}"
-                    class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out">
+                    class="bg-green-600 text-white font-bold border-2 border-black px-4 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
                     + Crear nueva comisión
                 </a>
             </div>

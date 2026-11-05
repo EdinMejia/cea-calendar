@@ -126,7 +126,7 @@
                             </div>
 
                             <div class="flex justify-end gap-3 mt-6">
-                                <button type="button" @click="mostrarModal = false; comisionSeleccionada = ''" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded shadow">
+                                <button type="button" @click="mostrarModal = false; comisionSeleccionada = ''" class="bg-gray-400 text-white font-bold border-2 border-black px-4 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
                                     Cancelar
                                 </button>
                                 <button type="button"
@@ -168,7 +168,7 @@
                                             alert('Error de red. revisa la consola para más detalles.');
                                         });
                                     "
-                                    class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow">
+                                    class="bg-green-600 text-white font-bold border-2 border-black px-4 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
                                     Guardar Comisión
                                 </button>
                             </div>
@@ -178,10 +178,10 @@
                 </div>
 
                 <div class="flex items-center justify-center gap-5 mt-6">
-                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out">
+                    <button type="submit" class="bg-green-600 text-white font-bold border-2 border-black px-4 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
                         CREAR COMISIÓN
                     </button>
-                    <a href="{{ route('comisiones.index') }}" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out">
+                    <a href="{{ route('comisiones.index') }}" class="bg-red-600 text-white font-bold border-2 border-black px-4 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
                         CANCELAR
                     </a>
                 </div>
