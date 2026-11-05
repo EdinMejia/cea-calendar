@@ -10,4 +10,9 @@ class UsuarioController extends Controller
     {
         return view('usuarios.index');
     }
+
+    public function solicitudes()
+    {
+        return view('usuarios.solicitudes');
+    }
 }

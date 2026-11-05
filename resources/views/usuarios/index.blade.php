@@ -19,10 +19,10 @@
         }" class="w-full">
         
         <!-- Botón superior -->
-        <div class="mb-4">
-            <button class="w-full bg-[#15803d] p-2 text-center text-sm font-bold text-white border-2 border-black shadow-[2px_2px_0px_rgba(0,0,0,1)] uppercase">
+        <div class="mb-4 flex gap-2">
+            <a href="{{ route('usuarios.solicitudes') }}" class="w-full bg-[#15803d] p-2 text-center text-sm font-bold text-white border-2 border-black shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_rgba(0,0,0,1)] transition-all uppercase block">
                 Solicitudes de Acceso
-            </button>
+            </a>
         </div>
 
         <!-- Controles de búsqueda -->

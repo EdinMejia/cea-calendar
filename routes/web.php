@@ -24,6 +24,10 @@ Route::resource('actividades', ActividadController::class)
 Route::get('/usuarios', [UsuarioController::class, 'index'])
     ->middleware(['auth'])
     ->name('usuarios.index');
+
+Route::get('/usuarios/solicitudes', [UsuarioController::class, 'solicitudes'])
+    ->middleware(['auth'])
+    ->name('usuarios.solicitudes');
     
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
