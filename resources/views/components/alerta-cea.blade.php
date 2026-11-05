@@ -1,28 +1,30 @@
-@if (session()->has('success') || (isset($errors) && $errors->any()))
-    <!-- CDN de SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-    @if (session()->has('success'))
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
+@if (session('success') || session('error') || $errors->any())
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            @if (session('success'))
                 Swal.fire({
                     icon: 'success',
-                    title: "{{ session('success') }}",
+                    title: @js(session('success')),
                     showConfirmButton: false,
-                    timer: 2000
+                    timer: 2000,
+                    animation: false,
                 });
-            });
-        </script>
-    @elseif (isset($errors) && $errors->any())
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
+            @elseif (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: @js(session('error')),
+                    confirmButtonText: 'Aceptar',
+                    animation: false,
+                });
+            @else
                 Swal.fire({
                     icon: 'warning',
                     title: 'Complete los campos correctamente',
                     text: 'Revise los campos marcados en rojo.',
-                    confirmButtonText: 'Aceptar'
+                    confirmButtonText: 'Aceptar',
+                    animation: false,
                 });
-            });
-        </script>
-    @endif
+            @endif
+        });
+    </script>
 @endif

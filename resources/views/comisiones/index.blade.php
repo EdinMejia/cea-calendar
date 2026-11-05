@@ -115,10 +115,8 @@
                                                 Editar
                                             </a>
 
-                                            <form action="{{ route('comisiones.destroy', $comision->id) }}"
-                                                    method="POST"
-                                                    class="inline-block"
-                                                    onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta comisión?');">
+                                            <form action="{{ route('comisiones.destroy', $comision->id) }}" method="POST"
+                                                class="form-eliminar" data-mensaje="¿Desea eliminar esta comisión?">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"

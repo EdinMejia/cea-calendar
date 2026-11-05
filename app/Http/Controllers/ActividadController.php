@@ -101,7 +101,7 @@ class ActividadController extends Controller
 
     // Redirigimos a la pantalla de detalles ("show") con mensaje de éxito
     return redirect()->route('actividades.show', $actividad->id)
-            ->with('success', 'Actividad actualizada correctamente.');
+        ->with('success', 'Actividad actualizada correctamente.');
     }
 
     public function destroy($id)
@@ -114,6 +114,8 @@ class ActividadController extends Controller
 
     // Redirigimos al inicio (dashboard) activando tu alerta verde de éxito
     return redirect()->route('dashboard')
-            ->with('success', 'La actividad fue eliminada correctamente.');
+            ->with('success', 'La actividad fue eliminada correctamente.')
+            ->with('error', 'No se pudo eliminar la Actividad.'); // Mensaje de error si algo falla
     }
 }
+ 
