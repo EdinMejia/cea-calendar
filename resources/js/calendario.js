@@ -122,6 +122,10 @@ if (el) {
         dayMaxEvents: compacto() ? false : 3,
         moreLinkClick: 'popover',
         moreLinkText: (n) => `+${n} más`,
+        dayMaxEventRows: true,
+        slotEventOverlap: false,
+        eventMinHeight: 40,
+        eventOverlap: false,
 
         nowIndicator: true,
         allDaySlot: false,
@@ -138,10 +142,17 @@ if (el) {
             if (info.view.type !== 'listMonth') return;
             const p = info.event.extendedProps;
             const celda = info.el.querySelector('.fc-list-event-title');
-            if (celda && p.lugar) {
+
+            if (celda) {
                 const linea = document.createElement('div');
-                linea.className = 'cea-lista-lugar';
-                linea.textContent = `${p.lugar} · ${p.comision}`;   
+                linea.className = 'mt-2 flex flex-wrap items-center gap-3';
+                const htmlLugar = p.lugar ? `<span class="text-sm font-semibold text-gray-700">${esc(p.lugar)}</span>` : '';
+                const htmlComision = p.comision ? `
+                    <span style="background-color:${esc(info.event.backgroundColor)}; color:${esc(info.event.textColor)}"
+                            class="border-2 border-black px-2 py-0.5 text-[10px] font-bold uppercase shadow-[1.5px_1.5px_0px_rgba(0,0,0,1)]">
+                            ${esc(p.comision)}
+                    </span>` : '';
+                linea.innerHTML = `${htmlLugar} ${htmlComision}`;
                 celda.appendChild(linea);
             }
         },

@@ -4,8 +4,9 @@
     </x-slot>
 
     @php
+        session(['ruta_dashboard' => request()->fullUrl()]);
         $boton = 'border-2 border-black px-3 py-2 text-center text-sm font-bold text-white shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_rgba(0,0,0,1)] whitespace-nowrap';
-        $vistaActual = $vista;
+        $vistaActual = $vista ?? 'mes';
     @endphp
 
     <form method="GET" action="{{ route('dashboard') }}" class="mt-6 mb-10 flex flex-col gap-5 sm:flex-row sm:flex-wrap sm:items-center">

@@ -56,11 +56,50 @@
 #calendario-cea .fc-daygrid-block-event .fc-event-time { font-weight: 800; }
 #calendario-cea .fc-daygrid-block-event .fc-event-title { font-weight: 700; }
 
+/* ---- Estilos para la Vista de Semana (TimeGrid) ---- */
+#calendario-cea .fc-timegrid-event {
+    border: 2px solid #000;
+    border-radius: 0;
+    box-shadow: 2px 2px 0 #000;
+    cursor: pointer;
+    margin-right: 4px; /* Separación entre eventos paralelos */
+}
+#calendario-cea .fc-timegrid-event .fc-event-main {
+    padding: 2px 4px;
+    font-size: 12px;
+    line-height: 1.25;
+}
+#calendario-cea .fc-timegrid-event .fc-event-time { font-weight: 800; }
+#calendario-cea .fc-timegrid-event .fc-event-title { font-weight: 700; }
+
+/* ---- Estilo para el botón de "+1 más" ---- */
+#calendario-cea .fc-daygrid-more-link {
+    font-weight: 800;
+    font-size: 11px;
+    color: #000;
+    background-color: #f3f4f6;
+    border: 2px solid #000;
+    padding: 1px 4px;
+    margin: 2px 3px;
+    display: block;
+    text-align: center;
+    text-transform: uppercase;
+}
+#calendario-cea .fc-daygrid-more-link:hover {
+    background-color: #e5e7eb;
+}
+
 /* ---- Vista Lista ---- */
-#calendario-cea .fc-list { border: 2px solid #000; }
-#calendario-cea .fc-list-event { cursor: pointer; }
-#calendario-cea .fc-list-day-cushion { font-weight: 800; text-transform: capitalize; }
+#calendario-cea .fc-list { border: 2px solid #000; border-radius: 0; }
+#calendario-cea .fc-list-event { cursor: pointer; transition: background-color 0.2s; }
+#calendario-cea .fc-list-day-cushion { font-weight: 800; text-transform: uppercase; background-color: #e5e7eb; border-top: 2px solid #000 !important; border-bottom: 2px solid #000 !important; padding: 10px 14px !important; }
 #calendario-cea .cea-lista-lugar { margin-top: 2px; font-size: .8rem; font-weight: 400; opacity: .85; }
+#calendario-cea .fc-list-event:hover td { background-color: #f9fafb; /* Efecto hover suave */}
+#calendario-cea .fc-list-event td { padding: 14px 16px !important; border-bottom: 2px solid #000 !important; }
+#calendario-cea .fc-list-event-dot { display: none; } 
+#calendario-cea .fc-list-event-time {font-weight: 800; font-size: 0.9rem; width: 160px; border-right: 2px solid #000 !important; background-color: #f3f4f6; }
+#calendario-cea .fc-list-event-title a {font-weight: 800; font-size: 1.05rem; text-transform: uppercase; color: #000; }
+#calendario-cea .fc-list-event-graphic { display: none !important; }
 
 /* ---- Celular: solo puntos de color (al tocar el día se abre la lista) ---- */
 #calendario-cea.cea-compacto .fc-toolbar { gap: .25rem; }
