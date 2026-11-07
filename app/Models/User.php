@@ -12,6 +12,9 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles;
+    public const PENDIENTE = 0;
+    public const ACTIVO = 1;
+    public const INACTIVO = 2;
 
     /**
      * The attributes that are mass assignable.
@@ -49,5 +52,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function scopePendientes($query)
+    {
+        return $query->where('status', self::PENDIENTE);
     }
 }

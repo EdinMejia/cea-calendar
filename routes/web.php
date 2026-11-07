@@ -14,25 +14,19 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
-Route::get('/actividades/historial', [ActividadController::class, 'historial'])
-    ->middleware(['auth', 'verified'])
-    ->name('actividades.historial');
+Route::prefix('usuarios')->name('usuarios.')->middleware(['auth'])->group(function () {
+    Route::get('/', [UsuarioController::class, 'index'])->name('index');
+    Route::get('/solicitudes', [UsuarioController::class, 'solicitudes'])->name('solicitudes'); 
+    Route::post('/solicitudes/{user}/aprobar', [UsuarioController::class, 'aprobar'])->name('solicitudes.aprobar');
+    Route::patch('/solicitudes/{user}/rechazar', [UsuarioController::class, 'rechazar'])->name('solicitudes.rechazar');
+});
 
-Route::resource('actividades', ActividadController::class)
-    ->middleware(['auth', 'verified']);
-
-Route::get('/usuarios', [UsuarioController::class, 'index'])
-    ->middleware(['auth'])
-    ->name('usuarios.index');
-
-Route::get('/usuarios/solicitudes', [UsuarioController::class, 'solicitudes'])
-    ->middleware(['auth'])
-    ->name('usuarios.solicitudes');
-    
 Route::middleware('auth')->group(function () {
+    // perfil 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    //comisiones
     Route::get('/comisiones', [ComisionController::class, 'index'])->name('comisiones.index');
     Route::get('/comisiones/crear', [ComisionController::class, 'create'])->name('comisiones.create');
     Route::post('/comisiones', [ComisionController::class, 'store'])->name('comisiones.store');
@@ -40,9 +34,18 @@ Route::middleware('auth')->group(function () {
     Route::put('/comisiones/{id}', [ComisionController::class, 'update'])->name('comisiones.update');
     Route::get('/comisiones/{id}/editar', [ComisionController::class, 'edit'])->name('comisiones.edit');
     Route::delete('/comisiones/{id}', [ComisionController::class, 'destroy'])->name('comisiones.destroy');
+    //actividades
     Route::get('/actividades', [ActividadController::class, 'index'])->name('actividades.index');
     Route::get('/actividades/crear', [ActividadController::class, 'create'])->name('actividades.create');
     Route::post('/actividades', [ActividadController::class, 'store'])->name('actividades.store');
+    Route::get('/actividades/historial', [ActividadController::class, 'historial'])->name('actividades.historial');
+
+    Route::prefix('/actividades/{actividad}')->whereNumber('actividad')->group(function () {
+        Route::get('/', [ActividadController::class, 'show'])->name('actividades.show');
+        Route::get('/editar', [ActividadController::class, 'edit'])->name('actividades.edit');
+        Route::put('/', [ActividadController::class, 'update'])->name('actividades.update');
+        Route::delete('/', [ActividadController::class, 'destroy'])->name('actividades.destroy');
+    });
 
 });
 

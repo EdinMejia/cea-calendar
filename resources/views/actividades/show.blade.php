@@ -69,7 +69,10 @@
 
             <div class="mt-8 flex flex-wrap items-center justify-between gap-4">
 
-                <a href="{{ route('dashboard') }}" class="bg-green-600 text-white font-bold border-2 border-black px-4 sm:px-6 py-2 text-sm sm:text-base shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
+                @php
+                    $urlVolver = url()->previous() !== url()->current() ? url()->previous() : route('dashboard'); 
+                @endphp
+                <a href="{{ session('ruta_dashboard', route('dashboard')) }}" class="bg-green-600 text-white font-bold border-2 border-black px-4 sm:px-6 py-2 text-sm sm:text-base shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
                     Volver
                 </a>
 

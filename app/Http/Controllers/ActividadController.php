@@ -51,7 +51,7 @@ class ActividadController extends Controller
     public function index()
     {
         $actividades = Actividad::with('comision')
-        ->ordenBy('hora_fecha')
+        ->orderBy('hora_fecha')
         ->get();
         return view('actividades.index', compact('actividades'));
     }
