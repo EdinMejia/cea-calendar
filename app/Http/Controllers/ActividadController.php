@@ -31,7 +31,7 @@ class ActividadController extends Controller
                 },
                 ],
             'comisiones_id' => ['required', Rule::exists('comisions', 'id')],
-            'descripcion' => ['nullable', 'string', 'max:200'],
+            'descripcion' => ['nullable', 'string', 'max:500'],
 
         ], [
             'required' => 'Este campo es obligatorio.',
@@ -91,7 +91,7 @@ class ActividadController extends Controller
         'comisiones_id'     => 'required|exists:comisions,id',
         'hora_fecha'        => 'required',
         'hora_finalizacion' => 'required',
-        'descripcion'       => 'nullable|string',
+        'descripcion'       => 'nullable|string|max:500',
     ]);
 
     $actividad = Actividad::findOrFail($id);
