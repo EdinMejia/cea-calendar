@@ -68,7 +68,7 @@
 
                 <div>
                     <label for="descripcion" class="mb-1 block text-sm font-medium text-slate-700">Descripción</label>
-                    <textarea id="descripcion" name="descripcion" rows="4" maxlength="200"
+                    <textarea id="descripcion" name="descripcion" rows="4" maxlength="500"
                         placeholder="Ej: Llevar cuadros de asistencia de alumnos y notas "
                         class="w-full rounded border px-3 py-2 @error('descripcion') border-red-500 @else border-gray-400 @enderror">{{ old('descripcion') }}</textarea>
                     @error('descripcion') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
