@@ -90,7 +90,7 @@
                                     {{-- Ciclo --}}
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
                                         <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-600 border border-gray-200">
-                                            {{ $comision->ciclo_comision }}
+                                            {{ \Carbon\Carbon::parse($comision->ciclo_comision)->format('Y') }}
                                         </span>
                                     </td>
 

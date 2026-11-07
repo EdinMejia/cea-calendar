@@ -12,6 +12,7 @@ class Comision extends Model
         'name_comision',
         'color_comision',
         'ciclo_comision',
+        'lider_id',
     ]; 
 
     public function docentes()
@@ -48,6 +49,11 @@ class Comision extends Model
     $luminancia = 0.2126 * $r + 0.7152 * $g + 0.0722 * $b;
 
     return $luminancia > 0.179 ? '#000000' : '#ffffff';
+    }
+
+    public function lider()
+    {
+        return $this->belongsTo(User::class, 'lider_id');
     }
 
 }

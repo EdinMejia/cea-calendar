@@ -149,6 +149,7 @@ class ComisionController extends Controller
 
         return redirect()->route('dashboard')
             ->with('success', 'La comision ha sido eliminada de forma permamente')
-            ->with('error', 'No se pudo eliminar la comision.'); // Mensaje de error si algo falla
+            ->with('error', 'No se pudo eliminar la comision.'); // Mensaje de error si algo falla     
     }
+    
 }
