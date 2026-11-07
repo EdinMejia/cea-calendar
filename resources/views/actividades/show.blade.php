@@ -50,7 +50,7 @@
 
                         <div>
                             <label for="descripcion" class="block font-bold text-black mb-1">Descripción</label>
-                            <div class="bg-white border-2 border-black p-2 text-sm min-h-[80px]">
+                            <div class="border-2 border-black bg-white px-3 py-2 text-sm font-medium text-black break-words break-all h-auto min-h-[80px]">
                                 {{ $actividad->descripcion ?? 'Sin descripción' }}
                             </div>
                         </div>
