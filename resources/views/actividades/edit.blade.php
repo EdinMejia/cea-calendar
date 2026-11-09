@@ -54,17 +54,17 @@
             <div class="space-y-5">
                 <div>
                     <label for="hora_fecha" class="mb-1 block text-sm font-medium text-slate-700">Fecha y Hora Inicio</label>
-                    <input type="datetime-local" id="hora_fecha" name="hora_fecha"
-                        value="{{ old('hora_fecha', \Carbon\Carbon::parse($actividad->hora_fecha)->format('Y-m-d\TH:i')) }}"
-                        class="w-full rounded border px-3 py-2 @error('hora_fecha') border-red-500 @else border-gray-400 @enderror">
+                    <input type="text" id="hora_fecha" name="hora_fecha"
+                            value="{{ old('hora_fecha') }}" placeholder="Seleccione fecha y hora"
+                            class="w-full rounded border px-3 py-2 @error('hora_fecha') border-red-500 @else border-gray-400 @enderror">
                     @error('hora_fecha') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
                     <label for="hora_finalizacion" class="mb-1 block text-sm font-medium text-slate-700">Hora de Finalización</label>
-                    <input type="time" id="hora_finalizacion" name="hora_finalizacion"
-                        value="{{ old('hora_finalizacion', \Carbon\Carbon::parse($actividad->hora_finalizacion)->format('H:i')) }}"
-                        class="w-full rounded border px-3 py-2 @error('hora_finalizacion') border-red-500 @else border-gray-400 @enderror">
+                    <input type="text" id="hora_finalizacion" name="hora_finalizacion"
+                            value="{{ old('hora_finalizacion') }}" placeholder="Seleccione la hora"
+                            class="w-full rounded border px-3 py-2 @error('hora_finalizacion') border-red-500 @else border-gray-400 @enderror">
                     @error('hora_finalizacion') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
 
@@ -98,26 +98,32 @@
         </div>
     </form>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/l10n/es.js"></script>
+
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const colores = {
-                amarillo: '#f1c40f', verde: '#2ecc71', azul: '#3498db',
-                naranja: '#e67e22', rojo: '#e74c3c', morado: '#9b59b6', rosa: '#ff8fd0',
-            };
+        flatpickr.localize(flatpickr.l10ns.es);
 
-            const select  = document.getElementById('comision');
-            const circulo = document.getElementById('colorComision');
+        flatpickr('#hora_fecha', {
+            enableTime: true,
+            dateFormat: 'Y-m-d H:i',
+            altInput: true,
+            altFormat: 'l j \\d\\e F \\d\\e Y, h:i K',
+            altInputClass: 'w-full rounded border px-3 py-2 bg-white {{ $errors->has('hora_fecha') ? 'border-red-500' : 'border-gray-400' }}',
+            minuteIncrement: 5,
+            disableMobile: true,
+        });
 
-            const pintar = () => {
-                if(select.selectedIndex === -1) return;
-                const valor = (select.selectedOptions[0].dataset.color || '').trim();
-                circulo.style.background = valor.startsWith('#')
-                    ? valor
-                    : (colores[valor.toLowerCase()] || '#cccccc');
-            };
-
-            select.addEventListener('change', pintar);
-            pintar(); 
+        flatpickr('#hora_finalizacion', {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: 'H:i',
+            altInput: true,
+            altFormat: 'h:i K',
+            altInputClass: 'w-full rounded border px-3 py-2 bg-white {{ $errors->has('hora_finalizacion') ? 'border-red-500' : 'border-gray-400' }}',
+            minuteIncrement: 5,
+            disableMobile: true,
         });
     </script>
 </x-app-layout>

@@ -6,6 +6,7 @@ use App\Models\Comision;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Validation\Rule;
 
 class ComisionController extends Controller
 {
@@ -29,10 +30,13 @@ class ComisionController extends Controller
             'docentes' => 'required|array',
             'comision_id' => 'required',
             'ciclo' => 'required|date',
+            'lider_id' => ['required_with_all:docentes,comision_id,ciclo', Rule::in((array) $request->input('docentes', []))]
         ], [
             'docentes.required' => 'Debes selecionar al menos un docente de la lista',
             'comision_id.required' => 'Debes seleccionar una comision.',
-            'ciclo.required' => 'La fecha del ciclo es obligatoria'
+            'ciclo.required' => 'La fecha del ciclo es obligatoria',
+            'lider_id.required_with_all' => 'Debes seleccionar el líder de la comisión.',
+            'lider_id.in' => 'El líder debe ser uno de los docentes seleccionados.'
         ]);
 
         if ($request->comision_id === 'nueva'){
@@ -55,6 +59,7 @@ class ComisionController extends Controller
         $idDeLacomision = $request->comision_id;
     }
     $comisionFinal = Comision::findOrFail($idDeLacomision);
+    $comisionFinal->update(['lider_id' => $request->lider_id]);
     $resultado = $comisionFinal->docentes()->syncWithoutDetaching($request->docentes);
 
     if (count($resultado['attached']) < count($request->docentes)) {
@@ -149,6 +154,7 @@ class ComisionController extends Controller
 
         return redirect()->route('dashboard')
             ->with('success', 'La comision ha sido eliminada de forma permamente')
-            ->with('error', 'No se pudo eliminar la comision.'); // Mensaje de error si algo falla
+            ->with('error', 'No se pudo eliminar la comision.'); // Mensaje de error si algo falla     
     }
+    
 }
