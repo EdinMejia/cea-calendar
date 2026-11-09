@@ -14,11 +14,17 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
-Route::prefix('usuarios')->name('usuarios.')->middleware(['auth'])->group(function () {
-    Route::get('/', [UsuarioController::class, 'index'])->name('index');
-    Route::get('/solicitudes', [UsuarioController::class, 'solicitudes'])->name('solicitudes'); 
-    Route::post('/solicitudes/{user}/aprobar', [UsuarioController::class, 'aprobar'])->name('solicitudes.aprobar');
-    Route::patch('/solicitudes/{user}/rechazar', [UsuarioController::class, 'rechazar'])->name('solicitudes.rechazar');
+Route::middleware('auth')->group(function () {
+        Route::prefix('usuarios')->name('usuarios.')->group(function () {
+            Route::get('/', [UsuarioController::class, 'index'])->name('index');
+
+            Route::group([],function () {
+                Route::get('/solicitudes', [UsuarioController::class, 'solicitudes'])->name('solicitudes'); 
+                Route::post('/solicitudes/{user}/aprobar', [UsuarioController::class, 'aprobar'])->name('solicitudes.aprobar');
+                Route::patch('/solicitudes/{user}/rechazar', [UsuarioController::class, 'rechazar'])->name('solicitudes.rechazar');
+                Route::delete('/solicitudes/{user}/eliminar', [UsuarioController::class, 'eliminar'])->name('solicitudes.eliminar');
+        });
+    });
 });
 
 Route::middleware('auth')->group(function () {

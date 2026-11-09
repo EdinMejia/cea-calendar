@@ -8,6 +8,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @property-read string $name
+ */
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -57,5 +61,12 @@ class User extends Authenticatable
     public function scopePendientes($query)
     {
         return $query->where('status', self::PENDIENTE);
+    }
+
+    public function getNameAttribute(): string
+    {
+        return preg_replace('/\s+/', ' ', trim(
+            "{$this->name_one} {$this->name_two} {$this->last_name_one} {$this->last_name_two}"
+        ));
     }
 }
