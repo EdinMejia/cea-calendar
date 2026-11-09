@@ -98,8 +98,10 @@
                                     <td class="px-6 py-4">
                                         <div class="flex flex-wrap gap-2 justify-center">
                                             @forelse ($comision->docentes as $docente)
-                                                <span class="bg-indigo-50 text-indigo-700 px-2 py-1 rounded-md text-xs border border-indigo-100 shadow-sm">
+                                                @php $esLider = $comision->lider_id == $docente->id; @endphp
+                                                <span class="px-2 py-1 rounded-md text-xs border shadow-sm {{ $esLider ? 'bg-yellow-300 text-black border-black font-bold' : 'bg-indigo-50 text-indigo-700 border-indigo-100' }}">
                                                     {{ $docente->name_one }} {{ $docente->last_name_one }}
+                                                    @if ($esLider) · Líder @endif
                                                 </span>
                                             @empty
                                                 <span class="text-xs text-gray-400 italic">Sin docentes asignados</span>
