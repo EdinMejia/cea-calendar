@@ -20,12 +20,38 @@
                             @endforeach
                         </ul>
                     </div>
-@endif
+                @endif
 
-                <form action="{{ route('comisiones.store') }}" method="POST">
+                <form id="form-comision" action="{{ route('comisiones.store') }}" method="POST" 
+                    x-data="{
+                        mostrarModal: false,
+                        comisionSeleccionada: '{{ old('comision_id', '') }}',
+                        colorSeleccionado: '{{ old('color_comision', 'transparent') }}',
+                        comisionTexto: '-- Seleccione una --',
+                        dropdownAbierto: false,
+                        nuevoColor: '#3B82F6',
+                        nuevaComisionNombre: '',
+                        mensajeError: '',
+                        mostrarLider: false,
+                        docentesElegidos: [],
+                        liderId: '{{ old('lider_id', '') }}',
+                        errorLider: '',
+                        abrirLider() {
+                            const marcados = Array.from(document.querySelectorAll('.chk-docente:checked'));
+                            const ciclo = document.getElementById('ciclo').value;
+                            if (marcados.length === 0 || !this.comisionSeleccionada || this.comisionSeleccionada === 'nueva' || !ciclo) {
+                                document.getElementById('form-comision').submit();
+                                return;
+                            }
+                            this.docentesElegidos = marcados.map(c => ({ id: c.value, nombre: c.dataset.nombre }));
+                            if (!this.docentesElegidos.some(d => d.id === this.liderId)) { this.liderId = ''; }
+                            this.errorLider = '';
+                            this.mostrarLider = true;
+                        }
+                    }">
                     @csrf
                     <!-- Se actualizó comisionSeleccionada con old() para recordar la opción -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8" x-data="{ mostrarModal: false, comisionSeleccionada: '{{ old('comision_id', '') }}', colorSeleccionado: '{{ old('color_comision', 'transparent') }}', comisionTexto: '-- Seleccione una --', dropdownAbierto: false, nuevoColor: '#3B82F6', nuevaComisionNombre: '', mensajeError: '' }">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>
                             <h2 class="text-lg font-bold mb-4">Nombres</h2>
                             <p class="text-sm text-gray-600 mb-4">Seleccione el nombre de los docentes que conformarán la comisión</p>
@@ -35,7 +61,7 @@
                                 <div>
                                     <label class="inline-flex items-center cursor-pointer">
                                         <!-- Se agregó la condición old() para recordar el checkbox -->
-                                        <input type="checkbox" name="docentes[]" value="{{ $docente->id }}" {{ (is_array(old('docentes')) && in_array($docente->id, old('docentes'))) ? 'checked' : '' }} class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
+                                        <input type="checkbox" name="docentes[]" value="{{ $docente->id }}" data-nombre="{{ $docente->name_one }} {{ $docente->name_two }} {{ $docente->last_name_one }}" {{ (is_array(old('docentes')) && in_array($docente->id, old('docentes'))) ? 'checked' : '' }} class="chk-docente rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
                                         <span class="ml-2">{{ $docente->name_one }} {{ $docente->name_two}} {{ $docente->last_name_one }} </span>
                                     </label>
                                 </div>
@@ -43,13 +69,14 @@
                         </div>
                     </div>
                     
-                    <div>
+                    <div> 
                         <div class="mb-4 border p-4 rounded bg-gray-50">
                             
                             <label for="comision_id" class="block text-gray-700 text-sm font-bold mb-2">Seleccione la Comisión</label>
                             
                             <select id="comision_id" name="comision_id" x-model="comisionSeleccionada" x-on:change="if($event.target.value === 'nueva') { mostrarModal = true; } colorSeleccionado = $event.target.options[$event.target.selectedIndex].dataset.color;" 
                                     class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-indigo-500 focus:ring-indigo-500 mb-4">
+                                    <option value="nueva" data-color="transparent" class="font-bold text-green-600" {{ old('comision_id') == 'nueva' ? 'selected' : '' }}>+ Añadir nueva comisión...</option>
                                 
                                 <option value="" disabled {{ old('comision_id') ? '' : 'selected' }} data-color="transparent"> Elija la comision </option>
                                 @foreach ($comisiones as $comision)
@@ -57,10 +84,15 @@
                                         {{ $comision->name_comision }}
                                     </option>
                                 @endforeach
-                                <option value="nueva" data-color="transparent" class="font-bold text-green-600" {{ old('comision_id') == 'nueva' ? 'selected' : '' }}>+ Añadir nueva comisión...</option>
+                                
                             </select>
                             <label for="ciclo" class="block text-gray-700 text-sm font-bold mb-2">Ciclo</label>
-                            <input for="ciclo" id="ciclo" type="date" name="ciclo" value="{{ old('ciclo') }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-indigo-500 focus:ring-indigo-500 mb-6">
+                            <select id="ciclo" name="ciclo" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-indigo-500 focus:ring-indigo-500 mb-6">
+                                <option value="">Seleccione el año</option>
+                                @for ($anio = now()->year - 1; $anio <= now()->year + 5; $anio++)
+                                    <option value="{{ $anio }}-01-01" {{ old('ciclo') == $anio . '-01-01' ? 'selected' : '' }}>{{ $anio }}</option>
+                                @endfor
+                            </select>
 
                             <div class="flex items-center mt-4 gap-3">
                                 <label for="color_comision" class="block text-gray-700 text-sm font-bold">Color: </label>
@@ -178,15 +210,49 @@
                 </div>
 
                 <div class="flex items-center justify-center gap-5 mt-6">
-                    <button type="submit" class="bg-green-600 text-white font-bold border-2 border-black px-4 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
+                    <button type="button" @click="abrirLider()" class="bg-green-600 text-white font-bold border-2 border-black px-4 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
                         CREAR COMISIÓN
                     </button>
                     <a href="{{ route('comisiones.index') }}" class="bg-red-600 text-white font-bold border-2 border-black px-4 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
                         CANCELAR
                     </a>
                 </div>
+                    <div x-show="mostrarLider" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60" style="display: none;">
+                        <div class="bg-white shadow-2xl p-6 w-full max-w-md mx-4 border-2 border-black">
+
+                            <h3 class="text-xl font-bold text-black mb-4 border-b-2 border-black pb-2">Seleccione el líder de esta comisión</h3>
+
+                            <div class="space-y-2 max-h-64 overflow-y-auto">
+                                <template x-for="d in docentesElegidos" :key="d.id">
+                                    <label class="flex items-center gap-3 cursor-pointer border-2 border-black px-3 py-2 bg-white'">
+                                        <input type="radio" name="lider_id" :value="d.id" x-model="liderId" @change="errorLider = ''" class="h-4 w-4">
+                                        <span class="font-bold text-sm" x-text="d.nombre"></span>
+                                    </label>
+                                </template>
+                            </div>
+
+                            <p x-show="errorLider !== ''" x-text="errorLider" class="mt-3 text-sm font-bold text-red-600" style="display: none;"></p>
+
+                            <div class="flex justify-end gap-3 mt-6">
+                                <button type="button" @click="mostrarLider = false"
+                                        class="bg-gray-400 text-white font-bold border-2 border-black px-4 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
+                                    Cancelar
+                                </button>
+                                <button type="button"
+                                        @click="if (liderId === '') { errorLider = 'Seleccione un líder para continuar.'; return; } document.getElementById('form-comision').submit();"
+                                        class="bg-green-600 text-white font-bold border-2 border-black px-4 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
+                                    Guardar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </x-app-layout>
+
+
+
+
+
