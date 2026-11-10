@@ -19,10 +19,17 @@ Route::middleware('auth')->group(function () {
             Route::get('/', [UsuarioController::class, 'index'])->name('index');
 
             Route::group([],function () {
+
                 Route::get('/solicitudes', [UsuarioController::class, 'solicitudes'])->name('solicitudes'); 
                 Route::post('/solicitudes/{user}/aprobar', [UsuarioController::class, 'aprobar'])->name('solicitudes.aprobar');
                 Route::patch('/solicitudes/{user}/rechazar', [UsuarioController::class, 'rechazar'])->name('solicitudes.rechazar');
                 Route::delete('/solicitudes/{user}/eliminar', [UsuarioController::class, 'eliminar'])->name('solicitudes.eliminar');
+
+                Route::put('/{user}/acceso', [UsuarioController::class, 'actualizarAcceso'])
+                    ->whereNumber('user')->name('acceso.actualizar');
+
+                Route::patch('/{user}/desactivar', [UsuarioController::class, 'desactivar'])
+                ->whereNumber('user')->name('desactivar');
         });
     });
 });
@@ -34,11 +41,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     //comisiones
     Route::get('/comisiones', [ComisionController::class, 'index'])->name('comisiones.index');
-    Route::get('/comisiones/crear', [ComisionController::class, 'create'])->name('comisiones.create');
     Route::post('/comisiones', [ComisionController::class, 'store'])->name('comisiones.store');
-    Route::post('/comisiones/ajax', [ComisionController::class, 'storeAjax'])->name('comisiones.ajax');
     Route::put('/comisiones/{id}', [ComisionController::class, 'update'])->name('comisiones.update');
-    Route::get('/comisiones/{id}/editar', [ComisionController::class, 'edit'])->name('comisiones.edit');
     Route::delete('/comisiones/{id}', [ComisionController::class, 'destroy'])->name('comisiones.destroy');
     //actividades
     Route::get('/actividades', [ActividadController::class, 'index'])->name('actividades.index');

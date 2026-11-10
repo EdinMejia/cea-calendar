@@ -10,9 +10,17 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Spatie\Permission\Models\Permission;
 class UsuarioController extends Controller
 {
-    private const ROL_ADMIN = 'Administrador';
+    private const ROL_ADMIN = 'Admin';
+
+    private const GRUPOS = [
+        'actividades' => ['Actividades', ['crear'=>'Crear', 'editar'=>'Editar', 'borrar'=>'Borrar']],
+        'comisiones' => ['Comisiones', ['crear'=>'Crear', 'editar'=>'Editar', 'borrar'=>'Borrar']],
+        'usuarios' => ['Usuarios', ['ver'=>'Ver usuarios']],
+    ];
 
     private const CAMPOS_BUSQUEDA = ['name_one', 'name_two', 'last_name_one', 'last_name_two', 'email'];
 
@@ -21,16 +29,37 @@ class UsuarioController extends Controller
         $busqueda  = trim((string) $request->query('buscar'));
         $filtroRol = trim((string) $request->query('rol'));
 
-        $usuarios = User::where('status', '!=', User::PENDIENTE)
+        $usuarios = User::where('status', User::ACTIVO)
             ->when($busqueda !== '', fn ($q) => $this->buscar($q, $busqueda))
             ->when($filtroRol !== '', fn ($q) => $q->whereHas('roles', fn ($r) => $r->where('name', $filtroRol)))
             ->with('roles')
             ->orderBy('name_one')
             ->get();
 
-        $roles = Role::orderBy('name')->pluck('name');
+        $roles = Role::where('guard_name', 'web')->orderBy('name')->pluck('name');
 
-        return view('usuarios.index', compact('usuarios', 'roles', 'busqueda', 'filtroRol'));
+        $datos = [
+            'busqueda'  => trim((string) $request->query('buscar')),
+            'filtroRol' => trim((string) $request->query('rol')),
+            'usuarios'  => $usuarios->map(fn ($u) => [
+                'id'       => $u->id,
+                'nombre'   => $u->name,
+                'rol'      => $u->roles->first()?->name ?? '',
+                'permisos' => $u->permissions->pluck('name')->values(),   // solo los directos
+                'busqueda' => Str::ascii(mb_strtolower($u->name.' '.$u->email.' '.($u->roles->first()?->name ?? ''))),
+            ])->values(),
+            'permisosDeRol' => Role::with('permissions')->get()
+            ->mapWithKeys(fn ($r) => [$r->name => $r->permissions->pluck('name')->values()]),
+            'urlActualizar' => route('usuarios.acceso.actualizar', ['user' => '__ID__']),
+        ];
+        return view('usuarios.index', [
+            'usuarios'       => $usuarios,
+            'roles'          => $roles,
+            'gruposPermisos' => $this->gruposPermisos(),
+            'pendientes'     => User::where('status', User::PENDIENTE)->count(),
+            'yoId'           => Auth::id(),
+            'datos'          => $datos,
+        ]);
     }
 
     public function solicitudes(Request $request)
@@ -124,6 +153,64 @@ class UsuarioController extends Controller
             ->with('success', "{$nombre} fue eliminado definitivamente del sistema.");
     }
 
+    public function actualizarAcceso(Request $request, User $user)
+{
+    abort_unless((int) $user->status === User::ACTIVO, 404);
+
+    if ($user->id === Auth::id()) {
+        return redirect()->route('usuarios.index')
+            ->with('error', 'No puedes modificar tu propio acceso.');
+    }
+
+    $gestionables = $this->permisosGestionables();
+
+    $data = $request->validate([
+        'rol'        => ['required', Rule::exists('roles', 'name')->where('guard_name', 'web')],
+        'permisos'   => ['nullable', 'array'],
+        'permisos.*' => ['string', Rule::in($gestionables)],
+    ], [
+        'rol.required' => 'Elige un rol para este usuario.',
+        'rol.exists'   => 'El rol elegido no es válido.',
+    ]);
+
+     // No dejar el sistema sin administradores
+    if ($user->hasRole(self::ROL_ADMIN) && $data['rol'] !== self::ROL_ADMIN && $this->totalAdmins() <= 1) {
+        return redirect()->route('usuarios.index')
+            ->with('error', 'No puedes quitar el rol al único administrador del sistema.');
+    }
+
+    DB::transaction(function () use ($user, $data, $gestionables) {
+        $user->syncRoles([$data['rol']]);
+
+        // Conserva los permisos directos que esta pantalla no administra
+        $fuera = $user->permissions->pluck('name')->diff($gestionables)->all();
+        $user->syncPermissions(array_merge($fuera, $data['permisos'] ?? []));
+    });
+
+    return redirect()->route('usuarios.index')
+        ->with('success', "Se actualizó el acceso de {$this->nombre($user)}.");
+}
+
+    public function desactivar(User $user)
+{
+    abort_unless((int) $user->status === User::ACTIVO, 404);
+    abort_if($user->id === Auth::id(), 403);
+
+    if ($user->hasRole(self::ROL_ADMIN) && $this->totalAdmins() <= 1) {
+        return redirect()->route('usuarios.index')
+            ->with('error', 'No puedes desactivar al único administrador del sistema.');
+    }
+
+    DB::transaction(function () use ($user) {
+        $user->update(['status' => User::INACTIVO]);
+        $user->syncRoles([]);
+        $user->syncPermissions([]);
+    });
+
+    return redirect()->route('usuarios.index')
+        ->with('success', "{$this->nombre($user)} fue desactivado y pasó al historial de solicitudes.");
+}
+
     // ---------- Ayudas privadas ----------
 
     private function buscar(Builder $query, string $texto): Builder
@@ -142,4 +229,34 @@ class UsuarioController extends Controller
     {
         return trim("{$user->name_one} {$user->last_name_one}");
     }
+
+    private function gruposPermisos(): array
+{
+    $existentes = Permission::where('guard_name', 'web')->pluck('name')->all();
+    $grupos = [];
+
+    foreach (self::GRUPOS as $clave => [$titulo, $acciones]) {
+        $items = [];
+        foreach ($acciones as $accion => $etiqueta) {
+            if (in_array("$clave.$accion", $existentes, true)) {
+                $items[] = ['name' => "$clave.$accion", 'label' => $etiqueta];
+            }
+        }
+        if ($items) {
+            $grupos[] = ['titulo' => $titulo, 'permisos' => $items];
+        }
+    }
+
+    return $grupos;
+}
+
+    private function permisosGestionables(): array
+{
+    return collect($this->gruposPermisos())->pluck('permisos')->flatten(1)->pluck('name')->all();
+}
+
+private function totalAdmins(): int
+{
+    return User::role(self::ROL_ADMIN)->where('status', User::ACTIVO)->count();
+}
 }
