@@ -40,7 +40,7 @@
                                             <input type="checkbox" id="docente-{{ $docente->id }}" name="docentes[]" value="{{ $docente->id }}"
                                                 {{ $comision->docentes->contains($docente->id) ? 'checked' : '' }}
                                                 class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
-                                            <span class="ml-2">{{ $docente->name_one }} {{ $docente->name_two}} {{ $docente->last_name_one }} </span>
+                                            <span class="ml-2">{{ $docente->name_one }} {{ $docente->name_two }} {{ $docente->last_name_one }} </span>
                                         </label>
                                     </div>
                                 @endforeach

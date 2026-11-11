@@ -5,68 +5,121 @@
             <div x-data="modalComisiones()" class="w-full relative">
 
                 {{-- Encabezado --}}
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-semibold text-gray-800">
-                        Comisiones creadas
-                    </h2>
+                                {{-- Recuadro con franja --}}
+                <div class="border-2 border-black bg-white shadow-[4px_4px_0px_rgba(0,0,0,1)]">
 
-                    <button type="button" @click="abrirCrear()"
-                        class="bg-green-600 text-white font-bold border-2 border-black px-4 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
-                        + Crear nueva comisión
-                    </button>
-                </div>
+                    {{-- Franja del título + botón crear --}}
+                    <div class="bg-gray-100 border-b-2 border-black px-6 py-4 flex flex-wrap justify-between items-center gap-3">
+                        <h2 class="text-xl font-bold text-black uppercase">Comisiones creadas</h2>
 
-                {{-- Contenedor de la tabla --}}
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 bg-white border-b border-gray-200 overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
+                        <button type="button" @click="abrirCrear()"
+                            class="bg-green-600 text-white font-bold border-2 border-black px-4 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
+                            + Crear nueva comisión
+                        </button>
+                    </div>
+
+                    <div class="p-6 overflow-x-auto">
+                        <table class="min-w-full divide-y-2 divide-black">
+                            <thead>
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Comisión</th>
-                                    <th scope="col" class="px-6 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Ciclo</th>
-                                    <th scope="col" class="px-6 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Docentes Asignados</th>
-                                    <th scope="col" class="px-6 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Acciones</th>
+                                    <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">Comisión</th>
+                                    <th scope="col" class="px-4 py-3 text-center text-xs font-bold text-black uppercase tracking-wider">Ciclo</th>
+                                    
+                                    <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">Docentes</th>
+                                    <th scope="col" class="px-4 py-3 text-center text-xs font-bold text-black uppercase tracking-wider">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @forelse ($comisiones as $comision)
-                                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200">
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                <div class="w-3 h-3 rounded-full border border-gray-300 shadow-sm mr-3" @style(['background-color: ' . ($comision->color_comision ?: '#3B82F6')])></div>
+                                    @php
+                                        $lider = $comision->docentes->firstWhere('id', $comision->lider_id);
+                                        $otros = $comision->docentes->where('id', '!=', $comision->lider_id);
+                                    @endphp
+                                    <tr class="hover:bg-gray-50 transition-colors duration-200">
+
+                                        {{-- Comisión --}}
+                                        <td class="px-4 py-4 whitespace-nowrap">
+                                            <div class="flex flex-col items-start gap-1 sm:flex-row sm:items-center sm:gap-0">
+                                                <div class="w-4 h-4 rounded-full border-2 border-black sm:mr-3" @style(['background-color: ' . ($comision->color_comision ?: '#3B82F6')])></div>
                                                 <div class="text-sm font-bold text-gray-800">{{ $comision->name_comision }}</div>
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-center">
-                                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-600 border border-gray-200">
+
+                                        {{-- Ciclo --}}
+                                        <td class="px-4 py-4 whitespace-nowrap text-center">
+                                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-bold border-2 border-black bg-gray-100 text-black">
                                                 {{ \Carbon\Carbon::parse($comision->ciclo_comision)->format('Y') }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4">
-                                            <div class="flex flex-wrap gap-2 justify-center">
-                                                @forelse ($comision->docentes as $docente)
-                                                    @php $esLider = $comision->lider_id == $docente->id; @endphp
-                                                    <span class="px-2 py-1 rounded-md text-xs border shadow-sm {{ $esLider ? 'bg-yellow-300 text-black border-black font-bold' : 'bg-indigo-50 text-indigo-700 border-indigo-100' }}">
-                                                        {{ $docente->name_one }} {{ $docente->last_name_one }}
-                                                        @if ($esLider) · Líder @endif
-                                                    </span>
-                                                @empty
-                                                    <span class="text-xs text-gray-400 italic">Sin docentes asignados</span>
-                                                @endforelse
+
+                                         
+                                         {{-- Integrantes (botón + ventana) --}}
+                                        <td class="px-4 py-4 align-top">
+                                            <div x-data="{ abierto: false }" @keydown.escape.window="abierto = false">
+
+                                                <button type="button" @click="abierto = true"
+                                                    class="bg-white text-black font-bold border-2 border-black px-3 py-1 text-sm shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_rgba(0,0,0,1)] transition-all">
+                                                    Integrantes
+                                                </button>
+
+                                                <template x-teleport="body">
+                                                    <div x-show="abierto" x-cloak
+                                                        @click.self="abierto = false"
+                                                        class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-6">
+
+                                                        <div class="w-full max-w-md max-h-[85vh] flex flex-col border-2 border-black bg-white shadow-[8px_8px_0px_rgba(0,0,0,1)]">
+
+                                                            {{-- Nombre y total --}}
+                                                            <div class="shrink-0 bg-gray-100 border-b-2 border-black px-6 sm:px-8 py-5">
+                                                                <h3 class="text-lg font-bold uppercase text-black">{{ $comision->name_comision }}</h3>
+                                                                <p class="text-sm text-gray-700">
+                                                                    Total de docentes: <span class="font-bold text-black">{{ $comision->docentes->count() }}</span>
+                                                                </p>
+                                                            </div>
+
+                                                            {{-- Líder --}}
+                                                            <div class="shrink-0 bg-yellow-300 border-b-2 border-black px-6 sm:px-8 py-4 text-sm font-bold text-black">
+                                                                Líder:
+                                                                {{ $lider ? $lider->name_one . ' ' . $lider->name_two . ' ' . $lider->last_name_one : 'Sin líder' }}
+                                                            </div>
+
+                                                            {{-- Miembros --}}
+                                                            <ul class="flex-1 overflow-y-auto divide-y divide-gray-200 px-6 sm:px-8 py-3">
+                                                                @forelse ($otros as $docente)
+                                                                    <li class="py-2 text-sm text-gray-800">
+                                                                        {{ $docente->name_one }} {{ $docente->name_two }} {{ $docente->last_name_one }}
+                                                                    </li>
+                                                                @empty
+                                                                    <li class="py-2 text-sm text-gray-400 italic">Sin más miembros</li>
+                                                                @endforelse
+                                                            </ul>
+
+                                                            {{-- Cerrar --}}
+                                                            <div class="shrink-0 border-t-2 border-black bg-gray-100 px-6 sm:px-8 py-4 flex justify-end">
+                                                                <button type="button" @click="abierto = false"
+                                                                    class="bg-red-600 text-white font-bold border-2 border-black px-4 py-1 text-sm shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_rgba(0,0,0,1)] transition-all">
+                                                                    Cerrar
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </template>
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                            <div class="flex justify-center items-center space-x-4">
+                                        {{-- Acciones --}}
+                                        <td class="px-4 py-4 whitespace-nowrap text-center text-sm">
+                                            <div class="flex justify-center items-center gap-3">
                                                 <button type="button" @click="abrirEditar({{ $comision->load('docentes')->toJson() }})"
-                                                    class="text-indigo-600 hover:text-indigo-900 mr-3 font-medium cursor-pointer bg-transparent border-none">
+                                                    class="bg-blue-600 text-white font-bold border-2 border-black px-3 py-1 text-sm shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_rgba(0,0,0,1)] transition-all">
                                                     Editar
                                                 </button>
 
                                                 <form action="{{ route('comisiones.destroy', $comision->id) }}" method="POST" class="form-eliminar" data-mensaje="¿Desea eliminar esta comisión permanentemente?">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="text-red-600 hover:text-red-900 bg-transparent border-none cursor-pointer p-0 m-0 font-medium">
-                                                        Eliminar Comision
+                                                    <button type="submit"
+                                                        class="bg-red-600 text-white font-bold border-2 border-black px-3 py-1 text-sm shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_rgba(0,0,0,1)] transition-all">
+                                                        Eliminar
                                                     </button>
                                                 </form>
                                             </div>
@@ -74,13 +127,16 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="px-6 py-8 text-center text-gray-500">
+                                        <td colspan="5" class="px-6 py-8 text-center text-gray-500">
                                             <span class="block text-lg font-medium">No hay comisiones creadas</span>
                                         </td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>
+                            <div class="mt-6">
+                                {{ $comisiones->links() }}
+                            </div>
                     </div>
                 </div>
 
@@ -116,7 +172,7 @@
                                             <input type="checkbox" name="docentes[]" value="{{ $docente->id }}" 
                                                 x-model="form.docentes" @change="verificarLider()"
                                                 class="w-5 h-5 border-2 border-black cursor-pointer focus:ring-0 text-blue-600">
-                                            <span class="line-clamp-1">{{ $docente->name_one }} {{ $docente->last_name_one }}</span>
+                                            <span class="line-clamp-1">{{ $docente->name_one }} {{ $docente->name_two }} {{ $docente->last_name_one }}</span>
                                         </label>
                                     @endforeach
                                 </div>
