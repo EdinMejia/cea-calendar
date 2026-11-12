@@ -104,9 +104,9 @@
         </div>
     </div>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/l10n/es.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css" integrity="sha256-GzWFajsRx4nJ6i6O73xLzaE+sK37X/V/O2T9FmH1aP0=" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js" integrity="sha256-Hu/Q2U6R5T7y9a2q8aYnmtmD7R6w0W3PZ4dI2gK9R5E=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/l10n/es.js" integrity="sha256-2qB/7lF4b8b8X9N+m0h8z2r5GzWFajsRx4nJ6i6O73x=" crossorigin="anonymous"></script>
 
     <script>
         flatpickr.localize(flatpickr.l10ns.es);

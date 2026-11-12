@@ -35,10 +35,59 @@
                 Historial de actividades
             </a>
         @endif
+
+        @can('actividades.ver')
+            <button type="button" @click="$dispatch('abrir-exportar')" class="{{ $boton }} bg-blue-600">
+                Exportar PDF
+            </button>
+        @endcan
+
     </form>
 
+    @can('actividades.ver')
+    <div x-data="{ abierto: false, fecha: @js(now()->toDateString()) }"
+            @abrir-exportar.window="abierto = true"
+            @keydown.escape.window="abierto = false"
+            x-show="abierto" x-cloak @click.self="abierto = false"
+            role="dialog" aria-modal="true" aria-label="Exportar reporte en PDF"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+
+        <div class="w-full max-w-sm border-2 border-black bg-white shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+
+            <div class="flex items-center justify-between border-b-2 border-black bg-[#83C152] px-4 py-3">
+                <h3 class="text-lg font-bold uppercase text-black">Exportar PDF</h3>
+                <button type="button" @click="abierto = false" aria-label="Cerrar"
+                        class="flex h-10 w-10 items-center justify-center text-xl font-bold text-black hover:bg-black/10">&times;</button>
+            </div>
+
+            <div class="space-y-4 p-4">
+                <div>
+                    <label for="fecha-reporte" class="mb-1 block text-sm font-bold text-black">Fecha de referencia</label>
+                    <input type="date" id="fecha-reporte" x-model="fecha"
+                            class="w-full border-2 border-black bg-white px-3 py-2 text-base font-bold text-black shadow-[2px_2px_0px_rgba(0,0,0,1)] outline-none focus:ring-0 sm:text-sm">
+                    <p class="mt-1 text-xs text-gray-600">Cada reporte toma la semana, el mes o el año que contiene esta fecha.</p>
+                </div>
+
+                <div class="flex flex-col gap-3">
+                    <a :href="'{{ route('reportes.semana') }}?fecha=' + fecha" target="_blank" rel="noopener" @click="abierto = false"
+                        class="{{ $boton }} inline-flex min-h-[44px] items-center justify-center bg-green-700">
+                        Reporte de la semana
+                    </a>
+                    <a :href="'{{ route('reportes.mes') }}?fecha=' + fecha" target="_blank" rel="noopener" @click="abierto = false"
+                        class="{{ $boton }} inline-flex min-h-[44px] items-center justify-center bg-green-700">
+                        Reporte del mes
+                    </a>
+                    <a :href="'{{ route('reportes.anio') }}?fecha=' + fecha" target="_blank" rel="noopener" @click="abierto = false"
+                        class="{{ $boton }} inline-flex min-h-[44px] items-center justify-center bg-orange-700">
+                        Resumen del año (con gráficas)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+@endcan
+
     @if ($vistaActual === 'mes')
-        {{-- ========== VISTA DE CALENDARIO ========== --}}
 
         @if ($leyenda->isNotEmpty())
             <ul class="mb-3 flex flex-wrap gap-2" aria-label="Leyenda de comisiones">
@@ -58,7 +107,6 @@
         @vite('resources/js/calendario.js')
 
     @else
-        {{-- ========== VISTA DE TARJETAS ========== --}}
 
         {{-- Tarjetas en una fila con scroll horizontal --}}
         <div id="contenedor-tarjetas" class="flex snap-x snap-proximity gap-6 overflow-x-auto pb-4 pt-2">
@@ -153,4 +201,38 @@
             });
         </script>
     @endif
+    
+    <style>
+    @media (max-width: 768px) {
+        .fc .fc-header-toolbar {
+            flex-direction: column !important;
+            gap: 16px; 
+        }
+        .fc .fc-header-toolbar .fc-toolbar-chunk:nth-child(1) {
+            width: 100%;
+            text-align: center;
+        }
+        .fc .fc-toolbar-title {
+            font-size: 1.5rem !important;
+            text-transform: uppercase; 
+        }
+
+        .fc .fc-header-toolbar .fc-toolbar-chunk:nth-child(2) {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .fc .fc-header-toolbar .fc-toolbar-chunk:nth-child(3) {
+            width: 100%;
+        }
+        .fc .fc-header-toolbar .fc-toolbar-chunk:nth-child(3) .fc-button-group {
+            width: 100%;
+            display: flex;
+        }
+        .fc .fc-header-toolbar .fc-toolbar-chunk:nth-child(3) .fc-button {
+            flex: 1; 
+        }
+    }
+</style>
 </x-app-layout>

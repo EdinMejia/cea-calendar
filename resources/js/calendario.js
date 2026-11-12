@@ -20,7 +20,7 @@ if (el) {
     }
 
     const buscador = document.getElementById('buscador-actividades');
-    const compacto = () => window.innerWidth < 768;   // true = celular
+    const compacto = () => window.innerWidth < 768;   
 
     const limpiar = (t) => (t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) =>
@@ -36,12 +36,10 @@ if (el) {
 
     // Celular: flechas a los lados del título y botones de vista abajo
     const barraSuperior = () => compacto()
-        ? { left: 'prev', center: 'title', right: 'next' }
+        ? { left: 'title', center: 'prev,today,next', right: 'dayGridMonth,listMonth' }
         : { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,listMonth' };
 
-    const barraInferior = () => compacto()
-        ? { left: 'today', right: 'dayGridMonth,listMonth' }
-        : false;
+    const barraInferior = () => false;
 
     let calendar;
     let eraCompacto = compacto();
@@ -52,7 +50,7 @@ if (el) {
         el.classList.toggle('cea-compacto', c);
         calendar.setOption('headerToolbar', barraSuperior());
         calendar.setOption('footerToolbar', barraInferior());
-        calendar.setOption('eventDisplay', c ? 'list-item' : 'block');  // punto o tarjetita
+        calendar.setOption('eventDisplay', c ? 'list-item' : 'block');  
         calendar.setOption('dayMaxEvents', c ? false : 3);
     };
 
@@ -129,9 +127,9 @@ if (el) {
 
         nowIndicator: true,
         allDaySlot: false,
-        slotMinTime: '00:00:00',     // así se ve también la actividad de las 12:00 AM
+        slotMinTime: '00:00:00',     
         slotMaxTime: '24:00:00',
-        scrollTime: '07:00:00',      // la vista Semana abre cerca de las 7 AM
+        scrollTime: '07:00:00',     
         eventTimeFormat: { hour: 'numeric', minute: '2-digit', hour12: true, meridiem: 'short' },
         noEventsText: 'No hay actividades en este período',
 
@@ -171,8 +169,6 @@ if (el) {
             if (compacto() && info.view.type === 'dayGridMonth') abrirDia(info.date);
         },
 
-        // Solo reacciona al cruzar el límite celular/computadora
-        // (el teclado del celular también "redimensiona" y no debe cambiar las vistas)
         windowResize: () => {
             const ahora = compacto();
             if (ahora === eraCompacto) return;

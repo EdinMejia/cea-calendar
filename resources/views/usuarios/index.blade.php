@@ -29,7 +29,6 @@
                     return (t || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
                 },
 
-                // Ids de los usuarios que coinciden con la búsqueda y el rol elegido
                 get visibles() {
                     const q = this.normalizar(this.busqueda.trim());
                     return this.usuarios
@@ -44,7 +43,6 @@
 
                 limpiarFiltros() { this.busqueda = ''; this.filtroRol = ''; },
 
-                // Un permiso "por rol" ya lo da el rol elegido: se muestra marcado y bloqueado
                 heredado(nombre) { return (this.permisosDeRol[this.rol] || []).includes(nombre); },
 
                 alternar(nombre) {
@@ -70,7 +68,6 @@
 
     <div x-data="accesos(@js($datos))" @keydown.escape.window="cerrarPanel()" class="w-full">
 
-        {{-- Solicitudes pendientes (solo quien gestiona accesos) --}}
         @can('usuarios.gestionar')
             <div class="mb-4">
                 <a href="{{ route('usuarios.solicitudes') }}"
@@ -83,7 +80,6 @@
             </div>
         @endcan
 
-        {{-- Búsqueda y filtro (instantáneos, sin recargar) --}}
         <div class="mb-6 flex flex-col gap-3 md:flex-row md:items-center">
             <input type="search" x-model="busqueda" autocomplete="off"
                     aria-label="Buscar usuario" placeholder="Buscar por nombre, correo o rol..."
@@ -102,7 +98,6 @@
             </button>
         </div>
 
-        {{-- Lista: tabla en computadora, tarjetas en celular --}}
         <section class="border-2 border-black bg-white shadow-[4px_4px_0px_rgba(0,0,0,1)]" aria-label="Usuarios con acceso">
             <div class="flex items-center justify-between gap-3 border-b-2 border-black bg-[#83C152] px-4 py-3">
                 <h3 class="text-lg font-bold uppercase text-black">Usuarios con acceso</h3>
@@ -154,7 +149,7 @@
                                             <form method="POST" action="{{ route('usuarios.desactivar', $u) }}"
                                                     data-confirmar
                                                     data-titulo="¿Desactivar usuario?"
-                                                    data-texto="{{ $u->name }} perderá su acceso al system. Podrás restaurarlo desde el historial de solicitudes."
+                                                    data-texto="{{ $u->name }} perderá su acceso al sistema. Podrás restaurarlo desde el historial."
                                                     data-boton="Sí, desactivar">
                                                 @csrf
                                                 @method('PATCH')
@@ -180,7 +175,6 @@
             </table>
         </section>
 
-        {{-- ============ PANEL LATERAL: asignar acceso ============ --}}
         @can('usuarios.gestionar')
             <div x-show="panelAbierto" x-cloak x-transition.opacity
                     @click="cerrarPanel()" aria-hidden="true"
@@ -208,7 +202,6 @@
 
                 <div class="flex-1 space-y-4 overflow-y-auto p-4">
 
-                    {{-- Rol: uno solo por usuario --}}
                     <fieldset class="border-2 border-black bg-white p-3 shadow-[2px_2px_0px_rgba(0,0,0,1)]">
                         <legend class="px-1 text-sm font-bold uppercase text-black">Rol</legend>
                         <div class="flex flex-col">
@@ -222,7 +215,6 @@
                         </div>
                     </fieldset>
 
-                    {{-- Permisos directos (excepciones) --}}
                     <fieldset class="border-2 border-black bg-white p-3 shadow-[2px_2px_0px_rgba(0,0,0,1)]">
                         <legend class="px-1 text-sm font-bold uppercase text-black">
                             Permisos directos <span class="text-[10px] font-normal text-gray-500">(excepciones)</span>
@@ -267,31 +259,4 @@
             </form>
         @endcan
     </div>
-
-    {{-- Confirmaciones con SweetAlert (los textos viajan en atributos data-*) --}}
-    <script>
-        document.addEventListener('submit', (e) => {
-            const form = e.target;
-            if (!(form instanceof HTMLFormElement) || !('confirmar' in form.dataset)) return;
-
-            e.preventDefault();
-            const enviar = () => form.submit();
-
-            if (!window.Swal) {
-                if (window.confirm(form.dataset.texto || '¿Continuar?')) enviar();
-                return;
-            }
-
-            Swal.fire({
-                title: form.dataset.titulo || '¿Estás seguro?',
-                text: form.dataset.texto || '',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#b91c1c',
-                cancelButtonColor: '#6b7280',
-                confirmButtonText: form.dataset.boton || 'Sí, continuar',
-                cancelButtonText: 'Cancelar',
-            }).then((r) => { if (r.isConfirmed) enviar(); });
-        });
-    </script>
 </x-app-layout>

@@ -7,6 +7,7 @@ use App\Http\Controllers\ActividadController;
 use App\Models\Actividad;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\ReporteController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -14,11 +15,14 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+    Route::middleware('auth')->group(function () {
         Route::prefix('usuarios')->name('usuarios.')->group(function () {
-            Route::get('/', [UsuarioController::class, 'index'])->name('index');
 
-            Route::group([],function () {
+        Route::get('/', [UsuarioController::class, 'index'])
+            ->middleware('permission:usuarios.ver')
+            ->name('index');
+
+            Route::middleware('permission:usuarios.gestionar')->group(function () {
 
                 Route::get('/solicitudes', [UsuarioController::class, 'solicitudes'])->name('solicitudes'); 
                 Route::post('/solicitudes/{user}/aprobar', [UsuarioController::class, 'aprobar'])->name('solicitudes.aprobar');
@@ -32,6 +36,14 @@ Route::middleware('auth')->group(function () {
                 ->whereNumber('user')->name('desactivar');
         });
     });
+
+    Route::prefix('reportes')->name('reportes.')->middleware('permission:actividades.ver')->group(function () {
+                Route::get('/semana', [ReporteController::class, 'semana'])->name('semana');
+                Route::get('/mes', [ReporteController::class, 'mes'])->name('mes');
+                Route::get('/anio', [ReporteController::class, 'anio'])->name('anio');
+                Route::get('/actividad/{actividad}', [ReporteController::class, 'actividad'])
+                    ->whereNumber('actividad')->name('actividad');
+            });
 });
 
 Route::middleware('auth')->group(function () {

@@ -140,28 +140,24 @@
                     </div>
                 </div>
 
-                <!-- ================= MODAL UNIFICADO ================= -->
                 <div x-show="panelAbierto" x-cloak class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 sm:p-4 transition-opacity">
                     <form :action="urlAccion" method="POST" @submit="enviando = true"
                         class="border-2 border-black bg-white w-full max-w-4xl shadow-[8px_8px_0px_rgba(0,0,0,1)] flex flex-col max-h-[90dvh] sm:max-h-[90vh] animate-slide-up sm:animate-none">
                         @csrf
                         <input type="hidden" name="_method" :value="modo === 'editar' ? 'PUT' : 'POST'">
                         
-                        <!-- Campos ocultos para evitar errores si están bloqueados visualmente -->
                         <input type="hidden" name="name_comision" :value="form.nombre">
                         <input type="hidden" name="ciclo_comision" :value="form.ciclo">
                         <input type="hidden" name="color_comision" :value="form.color">
 
-                        <!-- HEADER MODAL -->
                         <div class="shrink-0 flex justify-between items-center border-b-2 border-black bg-gray-100 p-4 sm:px-6">
                             <h2 class="text-base sm:text-lg font-bold uppercase text-black line-clamp-1" x-text="modo === 'crear' ? 'CREAR NUEVA COMISIÓN' : 'EDITAR COMISIÓN: ' + form.nombre"></h2>
                             <button type="button" @click="panelAbierto = false" class="text-black font-bold text-xl leading-none hover:text-red-600 px-2">&times;</button>
                         </div>
 
-                        <!-- CUERPO MODAL -->
                         <div class="flex-1 overflow-y-auto p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                             
-                            <!-- DOCENTES -->
+
                             <div class="flex flex-col">
                                 <label class="font-bold text-sm sm:text-base uppercase block mb-1">Docentes Asignados</label>
                                 <p class="text-xs text-gray-600 mb-3">Marque o desmarque a los docentes que conformarán la comisión.</p>
@@ -178,7 +174,6 @@
                                 </div>
                             </div>
 
-                            <!-- DATOS Y LÍDER -->
                             <div class="flex flex-col gap-4 sm:gap-5">
                                 <div x-show="modo === 'editar'" class="border-2 border-yellow-500 bg-yellow-50 p-3">
                                     <label class="flex items-center gap-2 cursor-pointer text-[11px] sm:text-xs font-bold text-yellow-800 uppercase">
@@ -197,7 +192,7 @@
                                 <div class="grid grid-cols-2 gap-3 sm:gap-4">
                                     <div>
                                         <label class="font-bold text-sm uppercase block mb-1">Ciclo (Año)</label>
-                                        <!-- Vuelve a ser Number para que sea cómodo de usar y no aparezca en blanco -->
+                                        
                                         <input type="number" x-model="form.ciclo" min="2020" max="2100" step="1" required 
                                             :disabled="modo === 'editar' && !desbloquearInfo"
                                             class="border-2 border-black w-full p-3 sm:p-2 outline-none disabled:bg-gray-200 disabled:text-gray-500 text-sm sm:text-base">
@@ -227,7 +222,6 @@
                             </div>
                         </div>
 
-                        <!-- FOOTER MODAL -->
                         <div class="shrink-0 border-t-2 border-black bg-gray-100 p-4 sm:px-6 flex flex-col-reverse sm:flex-row justify-end gap-3 sm:gap-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
                             <button type="button" @click="panelAbierto = false" 
                                     class="w-full sm:w-auto border-2 border-black bg-white px-4 py-3 sm:py-2 font-bold uppercase hover:bg-gray-200 transition-all shadow-[2px_2px_0px_rgba(0,0,0,1)] text-sm">
@@ -240,11 +234,10 @@
                         </div>
                     </form>
                 </div>
-            </div> <!-- FIN ALPINE -->
+            </div> 
         </div>
     </div>
 
-    <!-- SCRIPT ALPINE -->
     <script>
     document.addEventListener('alpine:init', () => {
         Alpine.data('modalComisiones', () => ({
@@ -257,7 +250,7 @@
             form: {
                 nombre: '',
                 color: '#000000',
-                ciclo: new Date().getFullYear(), // Inicia con el año actual
+                ciclo: new Date().getFullYear(), 
                 docentes: [], 
                 lider: ''     
             },
@@ -267,7 +260,7 @@
                 this.urlAccion = "{{ route('comisiones.store') }}";
                 this.desbloquearInfo = true; 
                 
-                let anioActual = new Date().getFullYear(); // Solo el año, ej: 2026
+                let anioActual = new Date().getFullYear(); 
                 
                 this.form = { nombre: '', color: '#ff0000', ciclo: anioActual, docentes: [], lider: '' };
                 this.enviando = false;
@@ -279,7 +272,6 @@
                 this.urlAccion = `/comisiones/${comision.id}`; 
                 this.desbloquearInfo = false; 
                 
-                // Extraemos solo el AÑO de la base de datos para mostrarlo en el input
                 let anioGuardado = new Date().getFullYear();
                 if (comision.ciclo_comision) {
                     anioGuardado = comision.ciclo_comision.split('-')[0]; 
@@ -306,7 +298,6 @@
     });
     </script>
 
-    <!-- SCRIPT DE CONFIRMACIÓN PARA ELIMINAR -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.form-eliminar').forEach(form => {
