@@ -201,7 +201,7 @@
                 </div>
 
                 <div class="flex-1 space-y-4 overflow-y-auto p-4">
-
+                    
                     <fieldset class="border-2 border-black bg-white p-3 shadow-[2px_2px_0px_rgba(0,0,0,1)]">
                         <legend class="px-1 text-sm font-bold uppercase text-black">Rol</legend>
                         <div class="flex flex-col">
@@ -215,36 +215,30 @@
                         </div>
                     </fieldset>
 
-                    <fieldset class="border-2 border-black bg-white p-3 shadow-[2px_2px_0px_rgba(0,0,0,1)]">
-                        <legend class="px-1 text-sm font-bold uppercase text-black">
-                            Permisos directos <span class="text-[10px] font-normal text-gray-500">(excepciones)</span>
-                        </legend>
+                    <p class="text-xs text-gray-600">
+                        El rol define las pantallas base. Aquí puedes dar acceso a pantallas adicionales.
+                    </p>
 
-                        @forelse ($gruposPermisos as $grupo)
-                            <div class="mt-2 first:mt-0">
-                                <h5 class="mb-1 text-xs font-bold uppercase text-gray-700">{{ $grupo['titulo'] }}:</h5>
-                                <div class="grid grid-cols-2 gap-x-2">
-                                    @foreach ($grupo['permisos'] as $p)
-                                        <label class="flex min-h-[44px] cursor-pointer items-center gap-2 text-sm font-bold text-black">
-                                            <input type="checkbox" name="permisos[]" value="{{ $p['name'] }}"
-                                                    :checked="heredado(@js($p['name'])) || permisos.includes(@js($p['name']))"
-                                                    :disabled="heredado(@js($p['name']))"
-                                                    @change="alternar(@js($p['name']))"
-                                                    class="h-5 w-5 cursor-pointer rounded-none border-2 border-black text-blue-600 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-60">
-                                            <span>
-                                                {{ $p['label'] }}
-                                                <span x-show="heredado(@js($p['name']))" x-cloak class="block text-[10px] font-normal text-gray-500">por rol</span>
-                                            </span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </div>
+                    <fieldset class="border-2 border-black bg-white p-3 shadow-[2px_2px_0px_rgba(0,0,0,1)]">
+                        <legend class="px-1 text-sm font-bold uppercase text-black">Pantallas</legend>
+
+                        @forelse ($pantallas as $p)
+                            <label class="flex min-h-[44px] cursor-pointer items-start gap-3 py-2 text-sm font-bold text-black">
+                                <input type="checkbox" name="permisos[]" value="{{ $p['name'] }}"
+                                        :checked="heredado(@js($p['name'])) || permisos.includes(@js($p['name']))"
+                                        :disabled="heredado(@js($p['name']))"
+                                        @change="alternar(@js($p['name']))"
+                                        class="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded-none border-2 border-black text-blue-600 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-60">
+                                <span>
+                                    {{ $p['label'] }}
+                                    <span x-show="heredado(@js($p['name']))" x-cloak class="block text-[10px] font-normal text-gray-500">incluida por el rol</span>
+                                </span>
+                            </label>
                         @empty
-                            <p class="text-sm text-gray-600">
-                                Aún no hay permisos creados. Ejecuta el seeder de roles y permisos.
-                            </p>
+                            <p class="text-sm text-gray-600">Aún no hay pantallas creadas. Ejecuta el seeder de roles y permisos.</p>
                         @endforelse
                     </fieldset>
+
                 </div>
 
                 <div class="flex shrink-0 flex-col-reverse gap-2 border-t-2 border-black bg-gray-100 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:flex-row sm:justify-center sm:gap-3">

@@ -20,15 +20,17 @@ class UsuarioController extends Controller
     private const ROL_ADMIN = 'Admin'; 
     private const CAMPOS_BUSQUEDA = ['name_one', 'name_two', 'last_name_one', 'last_name_two', 'email'];
 
-    private const GRUPOS = [
-        'actividades' => ['Actividades', ['crear'=>'Crear', 'editar'=>'Editar', 'borrar'=>'Borrar']],
-        'comisiones' => ['Comisiones', ['crear'=>'Crear', 'editar'=>'Editar', 'borrar'=>'Borrar']],
-        'usuarios' => ['Usuarios', ['ver'=>'Ver usuarios']],
+    // Lista plana de pantallas (accesos directos o excepciones)
+    private const PANTALLAS = [
+        'actividades.ver'       => 'Calendario y actividades (solo ver)',
+        'actividades.gestionar' => 'Crear, editar y eliminar actividades',
+        'actividades.historial' => 'Historial de actividades',
+        'comisiones.gestionar'  => 'Docentes y comisiones',
+        'usuarios.ver'          => 'Ver gestión de accesos',
     ];
 
     public function index(Request $request)
     {
-
         $usuarios = User::where('status', User::ACTIVO)
             ->with('roles', 'permissions')
             ->orderBy('name_one')
@@ -47,14 +49,14 @@ class UsuarioController extends Controller
                 'busqueda' => Str::ascii(mb_strtolower($u->name.' '.$u->email.' '.($u->roles->first()?->name ?? ''))),
             ])->values(),
             'permisosDeRol' => Role::with('permissions')->get()
-            ->mapWithKeys(fn ($r) => [$r->name => $r->permissions->pluck('name')->values()]),
+                ->mapWithKeys(fn ($r) => [$r->name => $r->permissions->pluck('name')->values()]),
             'urlActualizar' => route('usuarios.acceso.actualizar', ['user' => '__ID__']),
         ];
         
         return view('usuarios.index', [
             'usuarios'       => $usuarios,
             'roles'          => $roles,
-            'gruposPermisos' => $this->gruposPermisos(),
+            'pantallas'      => $this->pantallas(),
             'pendientes'     => User::where('status', User::PENDIENTE)->count(),
             'yoId'           => Auth::id(),
             'datos'          => $datos,
@@ -245,29 +247,22 @@ class UsuarioController extends Controller
         return trim("{$user->name_one} {$user->last_name_one}");
     }
 
-    private function gruposPermisos(): array
+    // Adaptado a la nueva estructura plana
+    private function pantallas(): array
     {
-        $existentes = Permission::where('guard_name', 'web')->pluck('name')->all();
-        $grupos = [];
+        $existentes = Permission::where('guard_name', 'web')->pluck('name');
 
-        foreach (self::GRUPOS as $clave => [$titulo, $acciones]) {
-            $items = [];
-            foreach ($acciones as $accion => $etiqueta) {
-                if (in_array("$clave.$accion", $existentes, true)) {
-                    $items[] = ['name' => "$clave.$accion", 'label' => $etiqueta];
-                }
-            }
-            if ($items) {
-                $grupos[] = ['titulo' => $titulo, 'permisos' => $items];
-            }
-        }
-
-        return $grupos;
+        return collect(self::PANTALLAS)
+            ->filter(fn ($etiqueta, $permiso) => $existentes->contains($permiso))
+            ->map(fn ($etiqueta, $permiso) => ['name' => $permiso, 'label' => $etiqueta])
+            ->values()
+            ->all();
     }
 
+    // Adaptado para usar la función $this->pantallas() directamente
     private function permisosGestionables(): array
     {
-        return collect($this->gruposPermisos())->pluck('permisos')->flatten(1)->pluck('name')->all();
+        return collect($this->pantallas())->pluck('name')->all();
     }
 
     private function totalAdmins(): int

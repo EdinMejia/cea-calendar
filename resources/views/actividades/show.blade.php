@@ -83,22 +83,24 @@
                     </a>
                 @endcan
 
-                <div class="flex gap-3 sm:gap-4">
-                    @can('actividades.editar')
-                        <a href="{{ route('actividades.edit', $actividad->id) }}" class="bg-blue-600 text-white font-bold border-2 border-black px-4 sm:px-6 py-2 text-sm sm:text-base shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
-                            Editar
-                        </a>
-                    @endcan
-                    @can('actividades.borrar')
-                        <form action="{{ route('actividades.destroy', $actividad->id) }}" method="POST" class= "form-eliminar" data-mensaje="¿Está seguro de eliminar la actividad?">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="bg-red-600 text-white font-bold border-2 border-black px-4 sm:px-6 py-2 text-sm sm:text-base shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
-                                Eliminar
-                            </button>
-                        </form>
-                    @endcan
-                </div>
+                @can('actividades.gestionar')
+                    <div class="flex gap-3 sm:gap-4">
+                        @can('actividades.editar')
+                            <a href="{{ route('actividades.edit', $actividad->id) }}" class="bg-blue-600 text-white font-bold border-2 border-black px-4 sm:px-6 py-2 text-sm sm:text-base shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
+                                Editar
+                            </a>
+                        @endcan
+                        @can('actividades.borrar')
+                            <form action="{{ route('actividades.destroy', $actividad->id) }}" method="POST" class= "form-eliminar" data-mensaje="¿Está seguro de eliminar la actividad?">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="bg-red-600 text-white font-bold border-2 border-black px-4 sm:px-6 py-2 text-sm sm:text-base shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
+                                    Eliminar
+                                </button>
+                            </form>
+                        @endcan
+                    </div>
+                @endcan
             </div>
         </div>
     </div>

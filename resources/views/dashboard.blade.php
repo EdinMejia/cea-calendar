@@ -26,15 +26,19 @@
             <option value="mes"  @selected($vistaActual === 'mes')>Mes con actividades</option>
         </select>
 
-        <a href="{{ route('actividades.create') }}" class="{{ $boton }} bg-green-700">
-            Crear nueva actividad
-        </a>
-
-        @if (Route::has('actividades.historial'))
-            <a href="{{ route('actividades.historial') }}" class="{{ $boton }} bg-orange-700">
-                Historial de actividades
+        @can('actividades.gestionar')
+            <a href="{{ route('actividades.create') }}" class="{{ $boton }} bg-green-700">
+                Crear nueva actividad
             </a>
-        @endif
+        @endcan
+
+        @can('actividades.historial')
+            @if (Route::has('actividades.historial'))
+                <a href="{{ route('actividades.historial') }}" class="{{ $boton }} bg-orange-700">
+                    Historial de actividades
+                </a>
+            @endif
+        @endcan
 
         @can('actividades.ver')
             <button type="button" @click="$dispatch('abrir-exportar')" class="{{ $boton }} bg-blue-600">

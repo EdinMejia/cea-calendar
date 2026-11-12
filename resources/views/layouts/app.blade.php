@@ -38,16 +38,20 @@
                     </a>
 
                     <!-- Opción: Docentes y comisión -->
-                    <a href="{{ route('comisiones.index') }}" class="flex items-center gap-3 px-6 py-2 transition-all hover:bg-black/10" :class="!sidebarAbierto ? 'justify-center px-0' : ''">
-                        <svg class="w-6 h-6 flex-shrink-0 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                        <span x-show="sidebarAbierto" x-cloak x-transition.opacity.duration.200ms class="font-bold text-white text-sm whitespace-nowrap">Docentes y comision</span>
-                    </a>
+                    @can('comisiones.gestionar')
+                        <a href="{{ route('comisiones.index') }}" class="flex items-center gap-3 px-6 py-2 transition-all hover:bg-black/10" :class="!sidebarAbierto ? 'justify-center px-0' : ''">
+                            <svg class="w-6 h-6 flex-shrink-0 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                            <span x-show="sidebarAbierto" x-cloak x-transition.opacity.duration.200ms class="font-bold text-white text-sm whitespace-nowrap">Docentes y comision</span>
+                        </a>
+                    @endcan
 
                     <!-- Opción: Solicitudes acceso -->
-                    <a href="{{ route('usuarios.index') }}" class="flex items-center gap-3 px-6 py-2 transition-all hover:bg-black/10" :class="!sidebarAbierto ? 'justify-center px-0' : ''">
-                        <svg class="w-6 h-6 flex-shrink-0 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
-                        <span x-show="sidebarAbierto" x-cloak x-transition.opacity.duration.200ms class="font-bold text-white text-sm whitespace-nowrap">Solicitudes acceso</span>
-                    </a>
+                    @can('usuarios.ver')
+                        <a href="{{ route('usuarios.index') }}" class="flex items-center gap-3 px-6 py-2 transition-all hover:bg-black/10" :class="!sidebarAbierto ? 'justify-center px-0' : ''">
+                            <svg class="w-6 h-6 flex-shrink-0 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
+                            <span x-show="sidebarAbierto" x-cloak x-transition.opacity.duration.200ms class="font-bold text-white text-sm whitespace-nowrap">Solicitudes acceso</span>
+                        </a>
+                    @endcan
                 </nav>
 
                 <div class="p-4 flex flex-col items-center border-t border-black/30 overflow-hidden" :class="!sidebarAbierto ? 'px-2' : ''">
