@@ -113,7 +113,6 @@ class ReporteController extends Controller
         ], 'actividad-'.Str::slug($actividad->nombre));
     }
 
-
     private function agenda(string $titulo, string $periodo, Collection $actividades, string $archivo)
     {
         return $this->pdf('reportes.agenda', [

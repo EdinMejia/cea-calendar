@@ -67,38 +67,34 @@
 
             </div>
 
-            <div class="mt-8 flex flex-wrap items-center justify-between gap-4">
+            <div class="mt-8 grid grid-cols-2 gap-4 sm:flex sm:flex-wrap sm:items-center sm:justify-between">
 
-                @php
-                    $urlVolver = url()->previous() !== url()->current() ? url()->previous() : route('dashboard'); 
-                @endphp
-                <a href="{{ session('ruta_dashboard', route('dashboard')) }}" class="bg-green-600 text-white font-bold border-2 border-black px-4 sm:px-6 py-2 text-sm sm:text-base shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
+                <a href="{{ route('dashboard') }}"
+                    class="block text-center bg-green-600 text-white font-bold border-2 border-black px-4 sm:px-6 py-2 text-sm sm:text-base shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
                     Volver
                 </a>
 
-                @can('actividades.ver')
-                    <a href="{{ route('reportes.actividad', $actividad) }}" target="_blank" rel="noopener"
-                        class="bg-blue-600 text-white font-bold border-2 border-black px-4 sm:px-6 py-2 text-sm sm:text-base shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
-                            Exportar PDF
-                    </a>
-                @endcan
+                <a href="{{ route('reportes.actividad', $actividad) }}"
+                    class="block text-center bg-blue-600 text-white font-bold border-2 border-black px-4 sm:px-6 py-2 text-sm sm:text-base shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
+                    Exportar PDF
+                </a>
 
                 @can('actividades.gestionar')
-                    <div class="flex gap-3 sm:gap-4">
-                        @can('actividades.editar')
-                            <a href="{{ route('actividades.edit', $actividad->id) }}" class="bg-blue-600 text-white font-bold border-2 border-black px-4 sm:px-6 py-2 text-sm sm:text-base shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
-                                Editar
-                            </a>
-                        @endcan
-                        @can('actividades.borrar')
-                            <form action="{{ route('actividades.destroy', $actividad->id) }}" method="POST" class= "form-eliminar" data-mensaje="¿Está seguro de eliminar la actividad?">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="bg-red-600 text-white font-bold border-2 border-black px-4 sm:px-6 py-2 text-sm sm:text-base shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
-                                    Eliminar
-                                </button>
-                            </form>
-                        @endcan
+                    <div class="contents sm:flex sm:gap-4">
+                        <a href="{{ route('actividades.edit', $actividad) }}"
+                            class="block text-center bg-blue-600 text-white font-bold border-2 border-black px-4 sm:px-6 py-2 text-sm sm:text-base shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
+                            Editar
+                        </a>
+
+                        <form action="{{ route('actividades.destroy', $actividad) }}" method="POST"
+                            class="form-eliminar" data-mensaje="¿Desea eliminar esta actividad?">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                class="w-full sm:w-auto bg-red-600 text-white font-bold border-2 border-black px-4 sm:px-6 py-2 text-sm sm:text-base shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
+                                Eliminar
+                            </button>
+                        </form>
                     </div>
                 @endcan
             </div>

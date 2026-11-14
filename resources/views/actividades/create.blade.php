@@ -41,9 +41,7 @@
                                     class="w-full border-2 px-3 py-2 bg-white focus:outline-none focus:ring-0 @error('nombre') border-red-600 @else border-black @enderror">
                                 <option value="" data-color="#cccccc">Seleccione la comisión encargada</option>
                                 @foreach ($comisiones as $comision)
-                                    <option value="{{ $comision->id }}"
-                                            data-color="{{ $comision->color_comision }}"
-                                            @selected(old('comisiones_id') == $comision->id)>
+                                    <option value="{{ $comision->id }}" data-color="{{ $comision->color_comision }}">
                                         {{ $comision->name_comision }}
                                     </option>
                                 @endforeach
@@ -81,7 +79,7 @@
                         <div>
                             <span class="mb-1 block text-sm font-medium text-slate-700">Color</span>
                             <span id="colorComision"
-                                class="inline-block h-10 w-10 rounded-full border border-gray-500"
+                                class="inline-block h-10 w-10 rounded-full border-2 border-black shadow-[2px_2px_0px_rgba(0,0,0,1)]"
                                 style="background:#cccccc;">
                             </span>
                         </div>
@@ -107,29 +105,54 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/l10n/es.js"></script>
 
     <script>
+    document.addEventListener('DOMContentLoaded', () => {
         flatpickr.localize(flatpickr.l10ns.es);
 
-        flatpickr('#hora_fecha', {
+        flatpickr('input[name="hora_fecha"]', {
             enableTime: true,
             dateFormat: 'Y-m-d H:i',
             altInput: true,
             altFormat: 'l j \\d\\e F \\d\\e Y, h:i K',
-            altInputClass: 'w-full border-2 px-3 py-2 bg-white focus:outline-none focus:ring-0 {{ $errors->has('hora_fecha') ? "border-red-600" : "border-black" }}',
-            minDate: 'today',
+            altInputClass: 'w-full border-2 border-black p-2 {{ $errors->has('hora_fecha') ? 'border-red-600' : '' }}',
+            minDate: 'today',    
             minuteIncrement: 5,
-            disableMobile: true,
+            disableMobile: true
         });
 
-        flatpickr('#hora_finalizacion', {
+        flatpickr('input[name="hora_finalizacion"]', {
             enableTime: true,
             noCalendar: true,
             dateFormat: 'H:i',
             altInput: true,
             altFormat: 'h:i K',
-            altInputClass: 'w-full border-2 px-3 py-2 bg-white focus:outline-none focus:ring-0 {{ $errors->has('hora_finalizacion') ? "border-red-600" : "border-black" }}',
+            altInputClass: 'w-full border-2 border-black p-2 {{ $errors->has('hora_finalizacion') ? 'border-red-600' : '' }}',
             minuteIncrement: 5,
-            disableMobile: true,
+            disableMobile: true
         });
+    });
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const select  = document.querySelector('select[name="comisiones_id"]');
+        const circulo = document.getElementById('colorComision');
+        if (!select || !circulo) return;
+
+        // Nombres viejos en español (por si alguna comisión aún los tiene)
+        const nombres = {
+            amarillo: '#facc15', verde: '#22c55e', azul: '#3b82f6',
+            naranja: '#f97316', rojo: '#ef4444', morado: '#a855f7', rosa: '#ec4899'
+        };
+
+        function pintar() {
+            const opcion = select.options[select.selectedIndex];
+            const valor  = ((opcion && opcion.dataset.color) || '').trim();
+            circulo.style.backgroundColor = nombres[valor.toLowerCase()] || valor || '#cccccc';
+        }
+
+        select.addEventListener('change', pintar);
+        pintar();
+    });
     </script>
 
     <link rel="stylesheet" href="...flatpickr.min.css">

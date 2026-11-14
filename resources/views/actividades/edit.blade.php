@@ -9,7 +9,7 @@
 
         <div class="p-8">
 
-            <form action="{{ route('actividades.update', $actividad->id) }}" method="POST"
+            <form action="{{ route('actividades.update', $actividad) }}" method="POST"
                 onsubmit="this.querySelector('[type=submit]').disabled = true;">
                 
                 @csrf
@@ -59,7 +59,7 @@
                         <div>
                             <label for="hora_fecha" class="mb-1 block text-sm font-medium text-slate-700">Fecha y Hora Inicio</label>
                                 <input type="text" id="hora_fecha" name="hora_fecha"
-                                    value="{{ old('hora_fecha') }}" placeholder="Seleccione fecha y hora"
+                                    value="{{ old('hora_fecha', $actividad->hora_fecha->format('Y-m-d H:i')) }}"
                                     class="w-full border-2 px-3 py-2 bg-white focus:outline-none focus:ring-0 @error('hora_fecha') border-red-600 @else border-black @enderror">
                                 @error('hora_fecha') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                         </div>
@@ -67,7 +67,7 @@
                         <div>
                             <label for="hora_finalizacion" class="mb-1 block text-sm font-medium text-slate-700">Hora de Finalización</label>
                             <input type="text" id="hora_finalizacion" name="hora_finalizacion"
-                                    value="{{ old('hora_finalizacion') }}" placeholder="Seleccione la hora"
+                                    value="{{ old('hora_finalizacion', substr($actividad->hora_finalizacion, 0, 5)) }}"
                                     class="w-full border-2 px-3 py-2 bg-white focus:outline-none focus:ring-0 @error('hora_finalizacion') border-red-600 @else border-black @enderror">
                             @error('hora_finalizacion') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                         </div>
@@ -83,15 +83,15 @@
                         <div>
                             <span class="mb-1 block text-sm font-medium text-slate-700">Color</span>
                             <span id="colorComision"
-                                class="inline-block h-10 w-10 rounded-full border border-gray-500"
-                                {!! 'style="background:' . ($actividad->comision->color_comision ?? '#cccccc') . ';"' !!}>
+                                class="inline-block h-10 w-10 rounded-full border-2 border-black shadow-[2px_2px_0px_rgba(0,0,0,1)]"
+                                style="background:#cccccc;">
                             </span>
                         </div>
                     </div>
                 </div>
 
                 <div class="mt-12 flex flex-wrap justify-center gap-4 sm:gap-16">
-                    <a href="{{ route('actividades.show', $actividad->id) }}"
+                    <a href="{{ route('actividades.show', $actividad) }}"
                         class="bg-red-600 text-white font-bold border-2 border-black px-4 sm:px-6 py-2 text-sm sm:text-base shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
                         Cancelar
                     </a>
@@ -109,27 +109,54 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/l10n/es.js" integrity="sha256-2qB/7lF4b8b8X9N+m0h8z2r5GzWFajsRx4nJ6i6O73x=" crossorigin="anonymous"></script>
 
     <script>
+    document.addEventListener('DOMContentLoaded', () => {
         flatpickr.localize(flatpickr.l10ns.es);
 
-        flatpickr('#hora_fecha', {
+        flatpickr('input[name="hora_fecha"]', {
             enableTime: true,
             dateFormat: 'Y-m-d H:i',
             altInput: true,
             altFormat: 'l j \\d\\e F \\d\\e Y, h:i K',
-            altInputClass: 'w-full border-2 px-3 py-2 bg-white focus:outline-none focus:ring-0 {{ $errors->has('hora_fecha') ? "border-red-600" : "border-black" }}',
-            disableMobile: true,
+            altInputClass: 'w-full border-2 border-black p-2 {{ $errors->has('hora_fecha') ? 'border-red-600' : '' }}',
+           
+            minuteIncrement: 5,
+            disableMobile: true
         });
 
-        flatpickr('#hora_finalizacion', {
+        flatpickr('input[name="hora_finalizacion"]', {
             enableTime: true,
             noCalendar: true,
             dateFormat: 'H:i',
             altInput: true,
             altFormat: 'h:i K',
-            altInputClass: 'w-full border-2 px-3 py-2 bg-white focus:outline-none focus:ring-0 {{ $errors->has('hora_finalizacion') ? "border-red-600" : "border-black" }}',
+            altInputClass: 'w-full border-2 border-black p-2 {{ $errors->has('hora_finalizacion') ? 'border-red-600' : '' }}',
             minuteIncrement: 5,
-            disableMobile: true,
+            disableMobile: true
         });
+    });
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const select  = document.querySelector('select[name="comisiones_id"]');
+        const circulo = document.getElementById('colorComision');
+        if (!select || !circulo) return;
+
+        // Nombres viejos en español (por si alguna comisión aún los tiene)
+        const nombres = {
+            amarillo: '#facc15', verde: '#22c55e', azul: '#3b82f6',
+            naranja: '#f97316', rojo: '#ef4444', morado: '#a855f7', rosa: '#ec4899'
+        };
+
+        function pintar() {
+            const opcion = select.options[select.selectedIndex];
+            const valor  = ((opcion && opcion.dataset.color) || '').trim();
+            circulo.style.backgroundColor = nombres[valor.toLowerCase()] || valor || '#cccccc';
+        }
+
+        select.addEventListener('change', pintar);
+        pintar();
+    });
     </script>
         <link rel="stylesheet" href="...flatpickr.min.css">
         <script src="...flatpickr.min.js"></script>

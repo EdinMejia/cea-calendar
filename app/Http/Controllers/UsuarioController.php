@@ -25,10 +25,10 @@ class UsuarioController extends Controller
         'actividades.ver'       => 'Calendario y actividades (solo ver)',
         'actividades.gestionar' => 'Crear, editar y eliminar actividades',
         'actividades.historial' => 'Historial de actividades',
-        'comisiones.gestionar'  => 'Docentes y comisiones',
+        'comisiones.ver'        => 'Docentes y comisiones (solo ver)',
+        'comisiones.gestionar'  => 'Crear, editar y eliminar docentes y comisiones',
         'usuarios.ver'          => 'Ver gestión de accesos',
     ];
-
     public function index(Request $request)
     {
         $usuarios = User::where('status', User::ACTIVO)

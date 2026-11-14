@@ -23,7 +23,7 @@ Route::middleware(['auth', 'activo'])->group(function () {
         
         Route::get('/actividades', [ActividadController::class, 'index'])->name('actividades.index');
         Route::get('/actividades/{actividad}', [ActividadController::class, 'show'])
-            ->whereNumber('actividad')->name('actividades.show');
+            ->where(['actividad' => '[A-Za-z0-9]{10,}'])->name('actividades.show');
 
         // Reportes
         Route::prefix('reportes')->name('reportes.')->group(function () {
@@ -31,7 +31,7 @@ Route::middleware(['auth', 'activo'])->group(function () {
             Route::get('/mes', [ReporteController::class, 'mes'])->name('mes');
             Route::get('/anio', [ReporteController::class, 'anio'])->name('anio');
             Route::get('/actividad/{actividad}', [ReporteController::class, 'actividad'])
-                ->whereNumber('actividad')->name('actividad');
+                ->where(['actividad' => '[A-Za-z0-9]{10,}'])->name('actividad');
         });
     });
 
@@ -44,7 +44,7 @@ Route::middleware(['auth', 'activo'])->group(function () {
         Route::get('/actividades/crear', [ActividadController::class, 'create'])->name('actividades.create');
         Route::post('/actividades', [ActividadController::class, 'store'])->name('actividades.store');
         
-        Route::prefix('/actividades/{actividad}')->whereNumber('actividad')->group(function () {
+        Route::prefix('/actividades/{actividad}')->where(['actividad' => '[A-Za-z0-9]{10,}'])->group(function () {
             Route::get('/editar', [ActividadController::class, 'edit'])->name('actividades.edit');
             Route::put('/', [ActividadController::class, 'update'])->name('actividades.update');
             Route::delete('/', [ActividadController::class, 'destroy'])->name('actividades.destroy');
@@ -52,8 +52,13 @@ Route::middleware(['auth', 'activo'])->group(function () {
     });
 
     // Docentes y comisiones
+        // Docentes y comisiones: ver la lista (solo ver o gestionar)
+    Route::get('/comisiones', [ComisionController::class, 'index'])
+        ->middleware('permission:comisiones.ver|comisiones.gestionar')
+        ->name('comisiones.index');
+
+    // Docentes y comisiones: crear, editar y eliminar
     Route::middleware('permission:comisiones.gestionar')->group(function () {
-        Route::get('/comisiones', [ComisionController::class, 'index'])->name('comisiones.index');
         Route::get('/comisiones/crear', [ComisionController::class, 'create'])->name('comisiones.create');
         Route::post('/comisiones', [ComisionController::class, 'store'])->name('comisiones.store');
         Route::post('/comisiones/ajax', [ComisionController::class, 'storeAjax'])->name('comisiones.ajax');

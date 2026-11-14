@@ -35,7 +35,7 @@ class DashboardController extends Controller
                 $comision = $a->comision;
 
                 return [
-                    'id'              => $a->id,
+                    'id'              => $a->getRouteKey(),
                     'title'           => $a->nombre,
                     'start'           => $inicio->format('Y-m-d\TH:i:s'),
                     'end'             => $fin->gt($inicio) ? $fin->format('Y-m-d\TH:i:s') : null,

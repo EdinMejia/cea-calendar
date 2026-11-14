@@ -71,7 +71,7 @@
                         </div>
 
                         <div class="mt-2">
-                            <a href="{{ route('actividades.edit', $actividad->id) }}" class="block w-full text-center bg-yellow-400 border-2 border-black px-4 py-2 text-sm font-bold text-black shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_rgba(0,0,0,1)]">
+                            <a href="{{ route('actividades.edit', $actividad) }}" class="block w-full text-center bg-yellow-400 border-2 border-black px-4 py-2 text-sm font-bold text-black shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_rgba(0,0,0,1)]">
                                 EDITAR ACTIVIDAD
                             </a>
                         </div>

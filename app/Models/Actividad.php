@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Concerns\UsaHashid;
 
 class Actividad extends Model
 {
+    use UsaHashid; 
     use HasFactory;
     protected $table = 'actividades';
     protected $fillable = [

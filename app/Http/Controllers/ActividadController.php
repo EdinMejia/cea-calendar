@@ -66,56 +66,44 @@ class ActividadController extends Controller
         return view('actividades.historial', compact('actividades'));
     }
 
-    public function show($id)
+    public function show(Actividad $actividad)
     {
     // Buscamos la actividad con su comisión asociada
-    $actividad = Actividad::with('comision')->findOrFail($id);
+    $actividad->load('comision');
     
     return view('actividades.show', compact('actividad'));
     }
 
-    public function edit($id)
+    public function edit(Actividad $actividad)
     {
-    $actividad = Actividad::findOrFail($id);
     $comisiones = Comision::all(); // Traemos todas las comisiones para el <select>
     
     return view('actividades.edit', compact('actividad', 'comisiones'));
     }
 
-    public function update(Request $request, $id)
+        public function update(Request $request, Actividad $actividad)
     {
-    // Validamos los datos entrantes
-    $request->validate([
-        'nombre'            => 'required|string|max:100',
-        'lugar'             => 'required|string|max:100',
-        'comisiones_id'     => 'required|exists:comisions,id',
-        'hora_fecha'        => 'required',
-        'hora_finalizacion' => 'required',
-        'descripcion'       => 'nullable|string|max:500',
-    ]);
+        $data = $request->validate([
+            'nombre'            => 'required|string|max:100',
+            'lugar'             => 'required|string|max:100',
+            'comisiones_id'     => 'required|exists:comisions,id',
+            'hora_fecha'        => 'required|date',
+            'hora_finalizacion' => 'required',
+            'descripcion'       => 'nullable|string|max:500',
+        ]);
 
-    $actividad = Actividad::findOrFail($id);
-    
-    // Actualizamos la base de datos
-    $actividad->update($request->all());
+        $actividad->update($data);
 
-    // Redirigimos a la pantalla de detalles ("show") con mensaje de éxito
-    return redirect()->route('actividades.show', $actividad->id)
-        ->with('success', 'Actividad actualizada correctamente.');
+        return redirect()->route('actividades.show', $actividad)
+            ->with('success', 'Actividad actualizada correctamente.');
     }
 
-    public function destroy($id)
+    public function destroy(Actividad $actividad)
     {
-    // Buscamos la actividad por su ID
-    $actividad = Actividad::findOrFail($id);
-    
-    // La eliminamos de la base de datos
-    $actividad->delete();
+        $actividad->delete();
 
-    // Redirigimos al inicio (dashboard) activando tu alerta verde de éxito
-    return redirect()->route('dashboard')
-            ->with('success', 'La actividad fue eliminada correctamente.')
-            ->with('error', 'No se pudo eliminar la Actividad.'); // Mensaje de error si algo falla
+        return redirect()->route('dashboard')
+            ->with('success', 'La actividad fue eliminada correctamente.');
     }
 }
  

@@ -12,10 +12,12 @@
                     <div class="bg-gray-100 border-b-2 border-black px-6 py-4 flex flex-wrap justify-between items-center gap-3">
                         <h2 class="text-xl font-bold text-black uppercase">Comisiones creadas</h2>
 
-                        <button type="button" @click="abrirCrear()"
-                            class="bg-green-600 text-white font-bold border-2 border-black px-4 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
-                            + Crear nueva comisión
-                        </button>
+                        @can('comisiones.gestionar')
+                            <button type="button" @click="abrirCrear()"
+                                class="bg-green-600 text-white font-bold border-2 border-black px-4 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
+                                + Crear nueva comisión
+                            </button>
+                        @endcan
                     </div>
 
                     <div class="p-6 overflow-x-auto">
@@ -27,7 +29,6 @@
                                     
                                     <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">Docentes</th>
                                     <th scope="col" class="px-4 py-3 text-center text-xs font-bold text-black uppercase tracking-wider">Acciones</th>
-                                </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @forelse ($comisiones as $comision)
@@ -108,26 +109,30 @@
                                         </td>
                                         {{-- Acciones --}}
                                         <td class="px-4 py-4 whitespace-nowrap text-center text-sm">
-                                            <div class="flex justify-center items-center gap-3">
-                                                <button type="button" @click="abrirEditar({{ $comision->load('docentes')->toJson() }})"
-                                                    class="bg-blue-600 text-white font-bold border-2 border-black px-3 py-1 text-sm shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_rgba(0,0,0,1)] transition-all">
-                                                    Editar
-                                                </button>
-
-                                                <form action="{{ route('comisiones.destroy', $comision->id) }}" method="POST" class="form-eliminar" data-mensaje="¿Desea eliminar esta comisión permanentemente?">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit"
-                                                        class="bg-red-600 text-white font-bold border-2 border-black px-3 py-1 text-sm shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_rgba(0,0,0,1)] transition-all">
-                                                        Eliminar
+                                            @can('comisiones.gestionar')
+                                                <div class="flex justify-center items-center gap-3">
+                                                    <button type="button" @click="abrirEditar({{ $comision->load('docentes')->toJson() }})"
+                                                        class="bg-blue-600 text-white font-bold border-2 border-black px-3 py-1 text-sm shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_rgba(0,0,0,1)] transition-all">
+                                                        Editar
                                                     </button>
-                                                </form>
-                                            </div>
+
+                                                    <form action="{{ route('comisiones.destroy', $comision->id) }}" method="POST" class="form-eliminar" data-mensaje="¿Desea eliminar esta comisión permanentemente?">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                            class="bg-red-600 text-white font-bold border-2 border-black px-3 py-1 text-sm shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_rgba(0,0,0,1)] transition-all">
+                                                            Eliminar
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            @else
+                                                <span class="text-gray-400">—</span>
+                                            @endcan
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="px-6 py-8 text-center text-gray-500">
+                                        <td colspan="4" class="px-6 py-8 text-center text-gray-500">
                                             <span class="block text-lg font-medium">No hay comisiones creadas</span>
                                         </td>
                                     </tr>
