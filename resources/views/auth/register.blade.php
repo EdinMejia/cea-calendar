@@ -7,7 +7,7 @@
             <!-- Primer Nombre -->
             <div>
                 <label for="name_one" class="block font-bold text-xs text-black uppercase">Primer Nombre</label>
-                <input id="name_one" type="text" name="name_one" :value="old('name_one')" required autofocus autocomplete="given-name"
+                <input id="name_one" type="text" name="name_one" value="{{ old('name_one') }}" required autofocus autocomplete="given-name"
                         class="mt-1 block w-full border-2 border-black p-2 text-sm outline-none focus:ring-0 shadow-[2px_2px_0px_rgba(0,0,0,1)]"
                         placeholder="Ej. Alejandro" />
                 <x-input-error :messages="$errors->get('name_one')" class="mt-2 text-red-600 font-bold text-xs" />
@@ -16,7 +16,7 @@
             <!-- Segundo Nombre -->
             <div>
                 <label for="name_two" class="block font-bold text-xs text-black uppercase">Segundo Nombre</label>
-                <input id="name_two" type="text" name="name_two" :value="old('name_two')" required autofocus autocomplete="additional-name"
+                <input id="name_two" type="text" name="name_two" value="{{ old('name_two') }}" required autofocus autocomplete="additional-name"
                         class="mt-1 block w-full border-2 border-black p-2 text-sm outline-none focus:ring-0 shadow-[2px_2px_0px_rgba(0,0,0,1)]"
                         placeholder="Ej. Andrés" />
                 <x-input-error :messages="$errors->get('name_two')" class="mt-2 text-red-600 font-bold text-xs" />
@@ -28,7 +28,7 @@
             <!-- Primer Apellido -->
             <div>
                 <label for="last_name_one" class="block font-bold text-xs text-black uppercase">Primer Apellido</label>
-                <input id="last_name_one" type="text" name="last_name_one" :value="old('last_name_one')" required autofocus autocomplete="family-name"
+                <input id="last_name_one" type="text" name="last_name_one" value="{{ old('last_name_one') }}" required autofocus autocomplete="family-name"
                         class="mt-1 block w-full border-2 border-black p-2 text-sm outline-none focus:ring-0 shadow-[2px_2px_0px_rgba(0,0,0,1)]"
                         placeholder="Ej. García" />
                 <x-input-error :messages="$errors->get('last_name_one')" class="mt-2 text-red-600 font-bold text-xs" />
@@ -37,7 +37,7 @@
             <!-- Segundo Apellido -->
             <div>
                 <label for="last_name_two" class="block font-bold text-xs text-black uppercase">Segundo Apellido</label>
-                <input id="last_name_two" type="text" name="last_name_two" :value="old('last_name_two')" required autofocus autocomplete="off"
+                <input id="last_name_two" type="text" name="last_name_two" value="{{ old('last_name_two') }}" required autofocus autocomplete="off"
                         class="mt-1 block w-full border-2 border-black p-2 text-sm outline-none focus:ring-0 shadow-[2px_2px_0px_rgba(0,0,0,1)]"
                         placeholder="Ej. López" />
                 <x-input-error :messages="$errors->get('last_name_two')" class="mt-2 text-red-600 font-bold text-xs" />
@@ -47,7 +47,7 @@
         <!-- Email Address -->
         <div class="mt-4">
             <label for="email" class="block font-bold text-xs text-black uppercase">Correo Electrónico</label>
-            <input id="email" type="email" name="email" :value="old('email')" required autocomplete="username"
+            <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="username"
                     class="mt-1 block w-full border-2 border-black p-2 text-sm outline-none focus:ring-0 shadow-[2px_2px_0px_rgba(0,0,0,1)]"
                     placeholder="ej. alejandro12@gmail.com" />
             <x-input-error :messages="$errors->get('email')" class="mt-2 text-red-600 font-bold text-xs" />

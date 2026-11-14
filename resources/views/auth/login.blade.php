@@ -8,7 +8,7 @@
         <!-- Email Address -->
         <div>
             <label for="email" class="block font-bold text-sm text-black uppercase">Correo Electrónico</label>
-            <input id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username"
+            <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username"
                     class="mt-1 block w-full border-2 border-black p-3 outline-none focus:ring-0 shadow-[2px_2px_0px_rgba(0,0,0,1)]"
                     placeholder="ej. alejandro12@gmail.com" />
             <x-input-error :messages="$errors->get('email')" class="mt-2 text-red-600 font-bold text-sm" />
@@ -43,7 +43,7 @@
         <div class="block mt-4">
             <label for="remember_me" class="inline-flex items-center cursor-pointer">
                 <input id="remember_me" type="checkbox" name="remember" class="border-2 border-black text-blue-600 focus:ring-0 w-5 h-5 cursor-pointer shadow-[2px_2px_0px_rgba(0,0,0,1)]">
-                <span class="ms-2 text-sm font-bold text-gray-700">{{ __('Remember me') }}</span>
+                <span class="ms-2 text-sm font-bold text-gray-700">{{ __('Recordar mi sesion iniciada') }}</span>
             </label>
         </div>
 

@@ -42,10 +42,10 @@ class RoleSeeder extends Seeder
             });
 
         Role::findOrCreate(self::LECTOR, 'web')->syncPermissions(['actividades.ver']);
-        Role::findOrCreate(self::EDITOR, 'web')->syncPermissions(['actividades.ver','actividades.gestionar', 'comisiones.ver']);
+        Role::findOrCreate(self::EDITOR, 'web')->syncPermissions(['actividades.ver', 'actividades.historial', 'actividades.gestionar', 'comisiones.ver']);
         Role::findOrCreate(self::ADMIN, 'web')->syncPermissions(Permission::all());
 
-        app(PermissionRegistrar::class)->forgetCachedPermissions();
+app(PermissionRegistrar::class)->forgetCachedPermissions();
 
     }
 }
