@@ -7,10 +7,19 @@ use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ReporteController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/cuenta-pendiente', function () {
+    // Si la cuenta ya está activa, lo mandamos al dashboard
+    if ((int) Auth::user()->status === App\Models\User::ACTIVO) {
+        return redirect()->route('dashboard');
+    }
+    return view('usuarios.pendiente');
+})->middleware('auth')->name('cuenta.pendiente');
 
 Route::middleware(['auth', 'activo'])->group(function () {
 
@@ -33,6 +42,7 @@ Route::middleware(['auth', 'activo'])->group(function () {
             Route::get('/actividad/{actividad}', [ReporteController::class, 'actividad'])
                 ->where(['actividad' => '[A-Za-z0-9]{10,}'])->name('actividad');
         });
+
     });
 
     // Historial de actividades 

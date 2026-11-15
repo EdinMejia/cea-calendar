@@ -15,12 +15,10 @@ class EnsureUserIsActive
         $user = $request->user();
 
         if ($user && (int) $user->status !== User::ACTIVO) {
-            Auth::logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-
-            return redirect()->route('login')
-                ->withErrors(['email' => 'Tu cuenta no está activa. Contacta a un administrador.']);
+            
+            if (! $request->routeIs('cuenta.pendiente') && ! $request->routeIs('logout')) {
+                return redirect()->route('cuenta.pendiente');
+            }
         }
 
         return $next($request);
