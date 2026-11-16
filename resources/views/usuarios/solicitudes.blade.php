@@ -42,7 +42,6 @@
             </div>
         </form>
 
-        {{-- ============ PENDIENTES ============ --}}
         <section class="{{ $seccion }}" aria-labelledby="t-pendientes">
             <div class="{{ $cabecera }} bg-[#83C152]">
                 <h3 id="t-pendientes" class="text-lg font-bold uppercase text-black">Solicitudes pendientes</h3>
@@ -75,7 +74,7 @@
                                                 class="{{ $campo }} w-full cursor-pointer sm:w-44">
                                             <option value="" disabled selected>Aceptar como...</option>
                                             @foreach ($roles as $rol)
-                                                <option value="{{ $rol }}">{{ ucfirst($rol) }}</option>
+                                                <option value="{{ $rol }}">{{ str_replace('Reader', 'Lector', ucfirst($rol)) }}</option>
                                             @endforeach
                                         </select>
                                         <button type="submit" x-show="rol !== ''" x-cloak :disabled="enviando"
@@ -108,7 +107,6 @@
             @endif
         </section>
 
-        {{-- ============ RECHAZADOS ============ --}}
         <section class="{{ $seccion }}" aria-labelledby="t-historial">
             <div class="{{ $cabecera }} bg-gray-200">
                 <h3 id="t-historial" class="text-lg font-bold uppercase text-black">Usuarios rechazados</h3>
@@ -141,7 +139,7 @@
                                                 class="{{ $campo }} w-full cursor-pointer sm:w-44">
                                             <option value="" disabled selected>Restaurar como...</option>
                                             @foreach ($roles as $rol)
-                                                <option value="{{ $rol }}">{{ ucfirst($rol) }}</option>
+                                                <option value="{{ $rol }}">{{ str_replace('Reader', 'Lector', ucfirst($rol)) }}</option>
                                             @endforeach
                                         </select>
                                         <button type="submit" x-show="rol !== ''" x-cloak :disabled="enviando"
@@ -174,12 +172,17 @@
             @endif
         </section>
 
-        {{-- ============ BITÁCORA ============ --}}
-        <section class="{{ $seccion }} mb-0" aria-labelledby="t-bitacora">
-            <div class="{{ $cabecera }} bg-gray-200">
-                <h3 id="t-bitacora" class="text-lg font-bold uppercase text-black">Bitácora de accesos</h3>
-                <span class="{{ $contador }}">{{ $bitacora->total() }}</span>
+        <section x-data="{ buscarBitacora: '' }" class="{{ $seccion }} mb-0" aria-labelledby="t-bitacora">
+            <div class="{{ $cabecera }} bg-gray-200 flex-col sm:flex-row sm:items-center">
+                <div class="flex items-center gap-3">
+                    <h3 id="t-bitacora" class="text-lg font-bold uppercase text-black">Bitácora de accesos</h3>
+                    <span class="{{ $contador }}">{{ $bitacora->total() }}</span>
+                </div>
+                
+                <input type="search" id='' x-model="buscarBitacora" placeholder="Buscar en bitácora..." 
+                        class="{{ $campo }} mt-3 w-full py-1 text-sm sm:mt-0 sm:w-64">
             </div>
+
 
             <table class="w-full border-collapse text-left text-sm">
                 <thead class="hidden border-b-2 border-black bg-gray-100 md:table-header-group">
@@ -191,10 +194,13 @@
                         <th class="p-3 font-bold uppercase">Realizado por</th>
                     </tr>
                 </thead>
+
                 <tbody class="block md:table-row-group">
                     @forelse ($bitacora as $b)
                         @php [$texto, $color] = $acciones[$b->accion] ?? [$b->accion, 'bg-white']; @endphp
-                        <tr class="{{ $fila }}">
+
+                        <tr x-show="buscarBitacora === '' || $el.textContent.toLowerCase().includes(buscarBitacora.toLowerCase())" 
+                            class="{{ $fila }}">
                             <td data-label="Fecha y hora" class="{{ $celda }} whitespace-nowrap">{{ $b->created_at?->format('d/m/Y h:i A') }}</td>
                             <td data-label="Usuario" class="{{ $celda }}">
                                 <span class="font-bold">{{ $b->usuario }}</span>

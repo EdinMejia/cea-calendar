@@ -131,7 +131,7 @@
 
                             <td data-label="Rol asignado" class="{{ $celda }}">
                                 <span class="inline-block border-2 border-black px-2 py-0.5 text-xs font-bold uppercase {{ $rolNombre ? 'bg-white' : 'bg-gray-200 text-gray-600' }}">
-                                    {{ $rolNombre ? ucfirst($rolNombre) : 'Sin rol' }}
+                                    {{ $rolNombre ? str_replace('Reader', 'Lector', $rolNombre) : 'Sin rol' }}
                                 </span>
                             </td>
 
@@ -209,7 +209,7 @@
                                 <label class="flex min-h-[44px] cursor-pointer items-center gap-3 text-sm font-bold text-black">
                                     <input type="radio" name="rol" value="{{ $rol }}" x-model="rol" required
                                             class="h-5 w-5 cursor-pointer border-2 border-black text-blue-600 focus:ring-0">
-                                    {{ ucfirst($rol) }}
+                                    {{ str_replace('Reader', 'Lector', ucfirst($rol)) }}
                                 </label>
                             @endforeach
                         </div>
