@@ -18,6 +18,10 @@
             </div>
         </div>
 
+        <a href="{{ route('dashboard') }}" class="bg-green-600 text-white font-bold border-2 border-black px-6 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
+            Volver
+        </a>
+
         <h2 class="text-3xl font-bold text-center mb-10 text-black uppercase">
             HISTORIAL DE ACTIVIDADES PASADAS
         </h2>
@@ -85,10 +89,6 @@
             @endforelse
         </div>
     </div>
-
-    <a href="{{ route('dashboard') }}" class="bg-green-600 text-white font-bold border-2 border-black px-6 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
-                    Volver
-    </a>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

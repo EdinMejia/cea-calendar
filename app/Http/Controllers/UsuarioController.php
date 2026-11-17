@@ -20,7 +20,7 @@ class UsuarioController extends Controller
     private const ROL_ADMIN = 'Admin'; 
     private const CAMPOS_BUSQUEDA = ['name_one', 'name_two', 'last_name_one', 'last_name_two', 'email'];
 
-    // Lista plana de pantallas (accesos directos o excepciones)
+    
     private const PANTALLAS = [
         'actividades.ver'       => 'Calendario y actividades (solo ver)',
         'actividades.gestionar' => 'Crear, editar y eliminar actividades',
@@ -31,10 +31,22 @@ class UsuarioController extends Controller
     ];
     public function index(Request $request)
     {
-        $usuarios = User::where('status', User::ACTIVO)
-            ->with('roles', 'permissions')
-            ->orderBy('name_one')
-            ->get();
+        $query = User::where('status', User::ACTIVO)
+            ->with('roles', 'permissions');
+
+        if ($request->filled('rol')) {
+            $rol = trim((string) $request->query('rol'));
+            
+            if ($rol === 'Sin rol') {
+                $query->doesntHave('roles');
+            } elseif ($rol !== '') {
+                $query->whereHas('roles', function($q) use ($rol) {
+                    $q->where('name', $rol);
+                });
+            }
+        }
+
+        $usuarios = $query->orderBy('name_one')->get();
 
         $roles = Role::where('guard_name', 'web')->orderBy('name')->pluck('name');
 

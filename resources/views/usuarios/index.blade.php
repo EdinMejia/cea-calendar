@@ -87,10 +87,14 @@
 
             <select x-model="filtroRol" aria-label="Filtrar por rol" class="{{ $campo }} w-full md:w-56">
                 <option value="">Filtrar por rol</option>
-                @foreach ($roles as $rol)
-                    <option value="{{ $rol }}">{{ ucfirst($rol) }}</option>
-                @endforeach
-                <option value="(sin rol)">Sin rol</option>
+                    @foreach($roles as $rol_db)
+                        <option value="{{ $rol_db }}" {{ request('rol') == $rol_db ? 'selected' : '' }}>
+                            {{-- Traducción visual: Si el rol es Reader, muestra Lector. Si no, muestra el original --}}
+                            {{ $rol_db == 'Reader' || $rol_db == 'reader' ? 'Lector' : $rol_db }}
+                        </option>
+                    @endforeach
+
+                <option value="Sin rol" {{ request('rol') == 'Sin rol' ? 'selected' : '' }}>Sin rol</option>
             </select>
 
             <button type="button" @click="limpiarFiltros()" class="{{ $boton }} w-full bg-blue-600 text-white md:w-auto">

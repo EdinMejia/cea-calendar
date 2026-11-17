@@ -69,10 +69,10 @@
 
             <div class="mt-8 grid grid-cols-2 gap-4 sm:flex sm:flex-wrap sm:items-center sm:justify-between">
 
-                <a href="{{ route('dashboard') }}"
-                    class="block text-center bg-green-600 text-white font-bold border-2 border-black px-4 sm:px-6 py-2 text-sm sm:text-base shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
+                <button type="button" onclick="window.history.back()"
+                    class="bg-red-600 text-white font-bold border-2 border-black px-4 py-2 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">
                     Volver
-                </a>
+                </button>
 
                 <a href="{{ route('reportes.actividad', $actividad) }}"
                     class="block text-center bg-blue-600 text-white font-bold border-2 border-black px-4 sm:px-6 py-2 text-sm sm:text-base shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all">

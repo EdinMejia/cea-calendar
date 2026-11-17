@@ -307,4 +307,30 @@
             border-top-color: #fff !important;
         }
     </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const inputNombre = document.getElementById('nombre');
+            const inputLugar = document.getElementById('lugar');
+            const inputDescripcion = document.getElementById('descripcion');
+            const formulario = document.getElementById('formActividad');
+
+            if (!inputNombre || !inputLugar || !inputDescripcion || !formulario) return;
+
+            if (!inputNombre.value) inputNombre.value = localStorage.getItem('draft_nombre') || '';
+            if (!inputLugar.value) inputLugar.value = localStorage.getItem('draft_lugar') || '';
+            if (!inputDescripcion.value) inputDescripcion.value = localStorage.getItem('draft_descripcion') || '';
+
+            inputNombre.addEventListener('keyup', () => localStorage.setItem('draft_nombre', inputNombre.value));
+            inputLugar.addEventListener('keyup', () => localStorage.setItem('draft_lugar', inputLugar.value));
+            inputDescripcion.addEventListener('keyup', () => localStorage.setItem('draft_descripcion', inputDescripcion.value));
+
+            formulario.addEventListener('submit', () => {
+                localStorage.removeItem('draft_nombre');
+                localStorage.removeItem('draft_lugar');
+                localStorage.removeItem('draft_descripcion');
+            });
+        });
+    </script>
 </x-app-layout>
