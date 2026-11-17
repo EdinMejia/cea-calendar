@@ -209,7 +209,7 @@
                                 <label class="flex min-h-[44px] cursor-pointer items-center gap-3 text-sm font-bold text-black">
                                     <input type="radio" name="rol" value="{{ $rol }}" x-model="rol" required
                                             class="h-5 w-5 cursor-pointer border-2 border-black text-blue-600 focus:ring-0">
-                                    {{ str_replace('Reader', 'Lector', ucfirst($rol)) }}
+                                    {{ str_replace('Reader', 'Editor', ucfirst($rol)) }} 
                                 </label>
                             @endforeach
                         </div>
