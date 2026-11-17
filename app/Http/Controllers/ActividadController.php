@@ -76,7 +76,7 @@ class ActividadController extends Controller
 
     public function edit(Actividad $actividad)
     {
-    $comisiones = Comision::all(); // Traemos todas las comisiones para el <select>
+    $comisiones = Comision::all(); 
     
     return view('actividades.edit', compact('actividad', 'comisiones'));
     }
@@ -84,12 +84,27 @@ class ActividadController extends Controller
         public function update(Request $request, Actividad $actividad)
     {
         $data = $request->validate([
-            'nombre'            => 'required|string|max:100',
-            'lugar'             => 'required|string|max:100',
-            'comisiones_id'     => 'required|exists:comisions,id',
-            'hora_fecha'        => 'required|date',
-            'hora_finalizacion' => 'required',
-            'descripcion'       => 'nullable|string|max:500',
+            'nombre'            => ['required', 'string', 'max:100'],
+            'lugar'             => ['required', 'string', 'max:100'],
+            'comisiones_id'     => ['required', 'exists:comisions,id'],
+            'hora_fecha'        => ['required', 'date'],
+            'hora_finalizacion' => [
+                'required',
+                'date_format:H:i',
+                function ($attribute, $value, $fail) use ($request) {
+                    $inicio = date('H:i', strtotime($request->hora_fecha));
+                    if ($value <= $inicio) {
+                        $fail('La hora de finalización debe ser posterior a la de inicio.');
+                    }
+                },
+            ],
+            'descripcion'       => ['nullable', 'string', 'max:500'],
+        ], [
+            'required'    => 'Este campo es obligatorio.',
+            'max'         => 'Máximo :max caracteres.',
+            'date'        => 'Ingrese una fecha válida.',
+            'date_format' => 'Ingrese una hora válida.',
+            'exists'      => 'Seleccione una opción válida.',
         ]);
 
         $actividad->update($data);

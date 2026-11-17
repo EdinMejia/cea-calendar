@@ -45,17 +45,16 @@
     <h2>Docentes de la comisión ({{ $docentes->count() }})</h2>
     <table class="lista">
         <thead>
-            <tr><th class="num">N.º</th><th>Docente</th><th class="firma">Firma de asistencia</th></tr>
+            <tr><th class="num">N.º</th><th>Docente</th></tr>
         </thead>
         <tbody>
             @forelse ($docentes as $d)
                 <tr class="{{ $loop->even ? 'alt' : '' }}">
                     <td class="num">{{ $loop->iteration }}</td>
                     <td>{{ $d->name }}</td>
-                    <td></td>
                 </tr>
             @empty
-                <tr><td colspan="3" class="vacio">La comisión no tiene docentes asignados.</td></tr>
+                <tr><td colspan="2" class="vacio">La comisión no tiene docentes asignados.</td></tr>
             @endforelse
         </tbody>
     </table>
