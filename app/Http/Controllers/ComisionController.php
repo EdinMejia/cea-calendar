@@ -11,8 +11,7 @@ class ComisionController extends Controller
 {
     public function index()
     {
-        $comisiones = Comision::has('docentes')
-            ->with('docentes')
+        $comisiones = Comision::with('docentes')
             ->orderBy('id')
             ->paginate(10);
         $todosLosDocentes = User::orderBy('name_one')->get();

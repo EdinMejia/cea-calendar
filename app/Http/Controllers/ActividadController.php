@@ -70,6 +70,11 @@ class ActividadController extends Controller
     {
     // Buscamos la actividad con su comisión asociada
     $actividad->load('comision');
+    $urlAnterior = url()->previous();
+
+    if (!str_contains($urlAnterior, '/edit') && $urlAnterior !== url()->current()) {
+        session(['url_volver_actividad' => $urlAnterior]);
+    }
     
     return view('actividades.show', compact('actividad'));
     }
