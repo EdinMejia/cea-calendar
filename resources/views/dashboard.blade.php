@@ -22,8 +22,8 @@
 
         <select name="vista" aria-label="Seleccionar vista" onchange="this.form.submit()"
                 class="w-full border-2 border-black bg-white px-2 py-2 text-base font-bold shadow-[2px_2px_0px_rgba(0,0,0,1)] outline-none sm:w-52 sm:text-sm">
-            <option value="dias" @selected($vistaActual === 'dias')>Días con actividades</option>
-            <option value="mes"  @selected($vistaActual === 'mes')>Mes con actividades</option>
+            <option value="mes" @selected($vistaActual === 'mes')>Mes con actividades </option>
+            <option value="dias"  @selected($vistaActual === 'dias')>Dias con Actividades (Tarjetas)</option>
         </select>
 
         @can('actividades.gestionar')

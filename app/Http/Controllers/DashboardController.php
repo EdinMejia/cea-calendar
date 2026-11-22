@@ -13,14 +13,14 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         // Solo acepta "mes"; cualquier otro valor cae en "dias"
-        $vista = $request->query('vista') === 'mes' ? 'mes' : 'dias';
+        $vista = $request->query('vista') === 'dias' ? 'dias' : 'mes';
 
         $consulta = Actividad::with('comision')->orderBy('hora_fecha');
 
         if ($vista === 'dias') {
-            $consulta->proximas();                                   // tarjetas: solo las próximas
+            $consulta->proximas();
         } else {
-            $consulta->where('hora_fecha', '>=', now()->subYear());  // calendario: último año en adelante
+            $consulta->where('hora_fecha', '>=', now()->subYear()); 
         }
 
         $actividades = $consulta->get();
