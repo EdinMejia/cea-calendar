@@ -11,11 +11,43 @@
         <style>[x-cloak] { display: none !important; }</style>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('menuLateral', () => ({
+                    sidebarAbierto: false,
+
+                    init() {
+                        const escritorio = () => window.innerWidth >= 768;
+                        const leer = () => { try { return localStorage.getItem('cea.menu'); } catch (e) { return null; } };
+                        let eraEscritorio = escritorio();
+
+                        // Computadora: recuerda tu última elección. Celular: siempre arranca cerrado.
+                        this.sidebarAbierto = escritorio() && leer() !== '0';
+
+                        this.$watch('sidebarAbierto', (abierto) => {
+                            if (!escritorio()) return;
+                            try { localStorage.setItem('cea.menu', abierto ? '1' : '0'); } catch (e) {}
+                        });
+
+                        // Solo reacciona al CRUZAR el límite celular/computadora.
+                        // El teclado o la barra del navegador móvil también disparan "resize" y no deben mover el menú.
+                        window.addEventListener('resize', () => {
+                            const ahora = escritorio();
+                            if (ahora === eraEscritorio) return;
+                            eraEscritorio = ahora;
+                            this.sidebarAbierto = ahora && leer() !== '0';
+                        });
+                    },
+                }));
+            });
+        </script>
     </head>
+
     
     <body class="bg-white font-sans text-black antialiased">
         
-        <div x-data="{ sidebarAbierto: window.innerWidth >= 768 }" @resize.window="sidebarAbierto = window.innerWidth >= 768" class="flex h-screen w-full border-2 border-black overflow-hidden relative">
+        <div x-data="menuLateral" x-cloak class="flex h-[100dvh] w-full border-2 border-black overflow-hidden relative">
             
             <div x-show="sidebarAbierto" x-cloak x-transition.opacity.duration.300ms @click="sidebarAbierto = false" class="fixed inset-0 bg-black/50 z-20 md:hidden"></div>
 
@@ -39,10 +71,10 @@
                     </a>
 
                     <!-- Opción: Docentes y comisión -->
-                    @can('comisiones.ver')
+                    @can('comisiones.gestionar')
                         <a href="{{ route('comisiones.index') }}" class="flex items-center gap-3 px-6 py-2 transition-all hover:bg-black/10" :class="!sidebarAbierto ? 'justify-center px-0' : ''">
                             <svg class="w-6 h-6 flex-shrink-0 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                            <span x-show="sidebarAbierto" x-cloak x-transition.opacity.duration.200ms class="font-bold text-white text-sm whitespace-nowrap">Docentes y comision</span>
+                            <span x-show="sidebarAbierto" x-cloak x-transition.opacity.duration.200ms class="font-bold text-white text-sm whitespace-nowrap">Docentes y comisión</span>
                         </a>
                     @endcan
 
@@ -57,8 +89,8 @@
 
                 <div class="p-4 flex flex-col items-center border-t border-black/30 overflow-hidden" :class="!sidebarAbierto ? 'px-2' : ''">
     
-                    <p x-show="sidebarAbierto" class="text-white text-sm font-bold mb-1 whitespace-nowrap">
-                        {{ Auth::user()->name_one . ' ' . Auth::user()->last_name_one ?: 'USUARIO CEA' }}
+                    <p x-show="sidebarAbierto" class="text-white text-sm font-bold mb-1 truncate w-full text-center">
+                        {{ Auth::user()->name ?: 'USUARIO CEA' }}
                     </p>
     
                     <p x-show="sidebarAbierto" class="text-white text-xs mb-3 truncate w-full text-center">
@@ -99,23 +131,23 @@
                     <x-alerta-cea />
                     {{ $slot }}
                 </main>
+                <script>
+                    document.addEventListener('submit', function (e) {
+                        const form = e.target.closest('.form-eliminar');
+                        if (!form) return;
+                        e.preventDefault();
+
+                        Swal.fire({
+                            icon: 'warning',
+                            title: form.dataset.mensaje || '¿Seguro que desea eliminar?',
+                            showCancelButton: true,
+                            confirmButtonText: 'Sí, eliminar',
+                            cancelButtonText: 'Cancelar',
+                            animation: false,
+                        }).then(r => { if (r.isConfirmed) form.submit(); });
+                    });
+                </script>
             </div>
         </div>
-        <script>
-            document.addEventListener('submit', function (e) {
-                const form = e.target.closest('.form-eliminar');
-                if (!form) return;
-                e.preventDefault();
-
-                Swal.fire({
-                    icon: 'warning',
-                    title: form.dataset.mensaje || '¿Seguro que desea eliminar?',
-                    showCancelButton: true,
-                    confirmButtonText: 'Sí, eliminar',
-                    cancelButtonText: 'Cancelar',
-                    animation: false,
-                }).then(r => { if (r.isConfirmed) form.submit(); });
-            });
-        </script>
     </body>
 </html>

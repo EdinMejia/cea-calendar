@@ -126,4 +126,3 @@ class ActividadController extends Controller
             ->with('success', 'La actividad fue eliminada correctamente.');
     }
 }
- 

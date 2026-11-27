@@ -26,7 +26,7 @@ class ComisionSeeder extends Seeder
                 [
                     'color_comision' => $comision['color_comision'],
                     'ciclo_comision' => $comision['ciclo_comision']
-                ] 
+                ]
             );
         }
     }

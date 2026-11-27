@@ -20,7 +20,7 @@ if (el) {
     }
 
     const buscador = document.getElementById('buscador-actividades');
-    const compacto = () => window.innerWidth < 768;   
+    const compacto = () => el.clientWidth < 700;
 
     const limpiar = (t) => (t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) =>
@@ -168,18 +168,28 @@ if (el) {
         dateClick: (info) => {
             if (compacto() && info.view.type === 'dayGridMonth') abrirDia(info.date);
         },
-
-        windowResize: () => {
-            const ahora = compacto();
-            if (ahora === eraCompacto) return;
-            eraCompacto = ahora;
-            aplicarModo();
-            calendar.changeView(ahora ? 'listMonth' : 'dayGridMonth');
-        },
     });
 
     el.classList.toggle('cea-compacto', compacto());
     calendar.render();
+
+    let anchoPrevio = el.clientWidth;
+    let cuadro = 0;
+    new ResizeObserver(() => {
+        if (el.clientWidth === anchoPrevio) return;
+        anchoPrevio = el.clientWidth;
+
+        cancelAnimationFrame(cuadro);
+        cuadro = requestAnimationFrame(() => {
+            const ahora = compacto();
+            if (ahora !== eraCompacto) {
+                eraCompacto = ahora;
+                aplicarModo();
+                calendar.changeView(ahora ? 'listMonth' : 'dayGridMonth');
+            }
+            calendar.updateSize(); 
+        });
+    }).observe(el);
 
     if (buscador) {
         buscador.addEventListener('keydown', (e) => { if (e.key === 'Enter') e.preventDefault(); });

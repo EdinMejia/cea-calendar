@@ -35,7 +35,6 @@ class ComisionController extends Controller
             'lider_id.required'      => 'Debes asignar un líder a la comisión.'
         ]);
 
-        // TRUCO: Convertimos el año (2026) en una fecha válida para MySQL (2026-01-01)
         $fechaCiclo = $data['ciclo_comision'] . '-01-01';
 
         DB::transaction(function () use ($data, $fechaCiclo) {

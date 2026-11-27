@@ -4,8 +4,6 @@
             
             <div x-data="modalComisiones()" class="w-full relative">
 
-                {{-- Encabezado --}}
-                                {{-- Recuadro con franja --}}
                 <div class="border-2 border-black bg-white shadow-[4px_4px_0px_rgba(0,0,0,1)]">
 
                     {{-- Franja del título + botón crear --}}
@@ -53,8 +51,8 @@
                                             </span>
                                         </td>
 
-                                         
-                                         {{-- Integrantes (botón + ventana) --}}
+                                        
+                                            {{-- Integrantes (botón + ventana) --}}
                                         <td class="px-4 py-4 align-top">
                                             <div x-data="{ abierto: false }" @keydown.escape.window="abierto = false">
 
@@ -189,7 +187,7 @@
 
                                 <div>
                                     <label class="font-bold text-sm uppercase block mb-1">Nombre de la Comisión</label>
-                                    <input type="text" x-model="form.nombre" required 
+                                    <input type="text" id = '' x-model="form.nombre" required 
                                         :disabled="modo === 'editar' && !desbloquearInfo"
                                         class="border-2 border-black w-full p-3 sm:p-2 outline-none font-bold disabled:bg-gray-200 disabled:text-gray-500 text-sm sm:text-base transition-colors">
                                 </div>
@@ -198,13 +196,13 @@
                                     <div>
                                         <label class="font-bold text-sm uppercase block mb-1">Ciclo (Año)</label>
                                         
-                                        <input type="number" x-model="form.ciclo" min="2020" max="2100" step="1" required 
+                                        <input type="number" id='' x-model="form.ciclo" min="2020" max="2100" step="1" required 
                                             :disabled="modo === 'editar' && !desbloquearInfo"
                                             class="border-2 border-black w-full p-3 sm:p-2 outline-none disabled:bg-gray-200 disabled:text-gray-500 text-sm sm:text-base">
                                     </div>
                                     <div>
                                         <label class="font-bold text-sm uppercase block mb-1">Color</label>
-                                        <input type="color" x-model="form.color" required 
+                                        <input type="color" id='' x-model="form.color" required 
                                             :disabled="modo === 'editar' && !desbloquearInfo"
                                             class="border-2 border-black w-full h-[46px] sm:h-[42px] p-1 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
                                     </div>
@@ -212,7 +210,7 @@
 
                                 <div class="mt-auto border-t-2 border-black pt-4">
                                     <label class="font-bold text-sm uppercase block mb-2">Seleccione el líder</label>
-                                    <select name="lider_id" x-model="form.lider" required 
+                                    <select name="lider_id" id='' x-model="form.lider" required 
                                             class="border-2 border-black w-full p-3 sm:p-2 outline-none cursor-pointer bg-white text-sm sm:text-base">
                                         <option value="" disabled selected>Elija un líder (requiere docentes)</option>
                                         @foreach($todosLosDocentes as $docente)

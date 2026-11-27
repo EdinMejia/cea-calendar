@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('comisions', function (Blueprint $table) {
-             $table->foreignId('lider_id')
-              ->nullable()
-              ->after('ciclo_comision')
-              ->constrained('users')
-              ->nullOnDelete();
+                $table->foreignId('lider_id')
+                ->nullable()
+                ->after('ciclo_comision')
+                ->constrained('users')
+                ->nullOnDelete();
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('comisions', function (Blueprint $table) {
-             Schema::table('comisions', function (Blueprint $table) {
+            Schema::table('comisions', function (Blueprint $table) {
         $table->dropConstrainedForeignId('lider_id');
     });
         });

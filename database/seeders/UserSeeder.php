@@ -33,7 +33,7 @@ class UserSeeder extends Seeder
                 'status'        => 1,
             ]
         );
-        $editor->assignRole('editor'); 
+        $editor->assignRole('editor');
 
         $lector = User::updateOrCreate(
             ['email' => 'lector@cea.com'],
